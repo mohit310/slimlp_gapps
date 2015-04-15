@@ -5,12 +5,14 @@ ui_print("****************************************************************");
 run_program("/sbin/busybox", "mount", "/system");
 ui_print("Removing old GApps...");
 delete_recursive("/system/app/AudioFX", "/system/app/DSPManager");
+delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager");
 delete_recursive("/system/priv-app/PrebuiltGmsCore");
 delete(
 "/system/addon.d/82-full_gapps.sh",
 "/system/addon.d/81-normal_gapps.sh",
 "/system/addon.d/80-gapps.sh",
 "/system/addon.d/80-maxxaudio.sh",
+"/system/addon.d/90-Maxxaudio.sh",
 "/system/addon.d/90-CamSettings.sh",
 "/system/addon.d/71-gapps-faceunlock.sh",
 "/system/app/FaceLock/FaceLock.apk",
