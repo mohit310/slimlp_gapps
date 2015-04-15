@@ -31,6 +31,7 @@ case "$1" in
       [ -n "$REPLACEMENT" ] && R="$S/$REPLACEMENT"
       [ -f "$C/$S/$FILE" ] && restore_file $S/"$FILE" "$R"
     done
+    rm /system/priv-app/AudioFX/AudioFX.apk
   ;;
   pre-backup)
     # Stub
