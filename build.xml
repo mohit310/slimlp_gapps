@@ -23,88 +23,33 @@
 <project name="buildGapps"
          default="buildAll"
          basedir=".">
-  <property file="build.properties"/>
-  <description>
-    This file list is used by ant to build the Slim Gapps project
-  </description>
+    <property file="build.properties"/>
+    <description>
+        This file list is used by ant to build the Slim Gapps project
+    </description>
 
-  <!--=======================================================================-->
-  <!-- some variables                                                        -->
-  <!--=======================================================================-->
-  <property name="app.name"                     value="buildGapps"/>
-  <property name="app.dir"                      value="${basedir}"/>
-  <property name="work.dir"                     value="${app.dir}/work"/>
-  <property name="build.dir"                    value="${app.dir}/build"/>
-  <property name="structure.dir"                value="${app.dir}/structure"/>
-  <property name="sign.jar"                     value="${app.dir}/tools/signapk.jar"/>
-  <property name="sign.pem"                     value="${app.dir}/tools/testkey.x509.pem"/>
-  <property name="sign.pk8"                     value="${app.dir}/tools/testkey.pk8"/>
-  
-  <tstamp>  
-    <format property="build.today" pattern="yyyyMMdd" />
-  </tstamp>  
-    
-  <!--=======================================================================-->
-  <!-- complete build                                                        -->
-  <!--=======================================================================-->
-  <target name="buildAll"
-        depends="cleanupBefore,initit,generateCleanUpList,buildZero,buildMini,buildNormal,buildFull,cleanupAfter"
-          description="execute complete build"/>
+    <!--=======================================================================-->
+    <!-- some variables                                                        -->
+    <!--=======================================================================-->
+    <property name="app.name" value="buildGapps"/>
+    <property name="app.dir" value="${basedir}"/>
+    <property name="work.dir" value="${app.dir}/work"/>
+    <property name="build.dir" value="${app.dir}/build"/>
+    <property name="structure.dir" value="${app.dir}/structure"/>
+    <property name="sign.jar" value="${app.dir}/tools/signapk.jar"/>
+    <property name="sign.pem" value="${app.dir}/tools/testkey.x509.pem"/>
+    <property name="sign.pk8" value="${app.dir}/tools/testkey.pk8"/>
 
-  <!--=======================================================================-->
-  <!-- zero                                                                  -->
-  <!--=======================================================================-->
-  <target name="buildZero"
-          description="execute zero gapps build">
-    <!-- preparations -->
-    <property environment="env"/>
-    <property name="file.name.zero" value="${build.dir}/Slim_zero_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}.zip"/>
-    <delete dir="${work.dir}"/>
-    <propertyfile file="${build.dir}/gapps.filenames">
-      <entry  key="zerofilename" value="${file.name.zero}"/>
-    </propertyfile>
-    <!-- copy files -->
-    <copy todir="${work.dir}">
-        <fileset dir="${structure.dir}">
-          <include name="META-INF/**" />
-          <include name="system/app/ConfigUpdater/**" />
-		  <include name="system/app/ExchangeServices/**" />
-		  <include name="system/app/GoogleCalendarSyncAdapter/**" />
-		  <include name="system/app/GoogleContactsSyncAdapter/**" />
-		  <include name="system/etc/**" />
-		  <include name="system/framework/**" />
-		  <include name="system/lib/**" />
-		  <include name="system/priv-app/GoogleBackupTransport/**" />
-		  <include name="system/priv-app/GoogleFeedback/**" />
-		  <include name="system/priv-app/GoogleLoginService/**" />
-		  <include name="system/priv-app/GoogleOneTimeInitializer/**" />
-		  <include name="system/priv-app/GooglePartnerSetup/**" />
-		  <include name="system/priv-app/GoogleServicesFramework/**" />
-		  <include name="system/priv-app/Phonesky/**" />
-		  <include name="system/priv-app/PrebuiltGmsCore/**" />
-		  <include name="system/priv-app/SetupWizard/**" />
-        </fileset>
-    </copy>
-	<copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
-        <filterchain>
-          <replaceregex pattern="@package@" replace="zero" flags="i"/>
-          <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
-          <linecontains negate="true">
-				<contains value="#zero"/>
-          </linecontains>
-        </filterchain>
-    </copy>
+    <tstamp>
+        <format property="build.today" pattern="yyyyMMdd"/>
+    </tstamp>
 
-    <!-- generate backup script --> 
-    <fileset id="item.file" dir="${work.dir}/system" includes="**/*.*" />
-    <pathconvert refid="item.file" property="file.list.zero" pathsep="&#10;" dirsep="/">
-        <map from="${work.dir}/system/" to=''/>
-    </pathconvert>
-    <copy file="${app.dir}/extras/80-gapps.sh" todir="${work.dir}/system/addon.d">
-        <filterchain>
-          <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
-        </filterchain>
-    </copy>
+    <!--=======================================================================-->
+    <!-- complete build                                                        -->
+    <!--=======================================================================-->
+    <target name="buildAll"
+            depends="cleanupBefore,initit,generateCleanUpList,buildZero,buildMini,buildNormal,buildFull,cleanupAfter"
+            description="execute complete build"/>
 
     <!--=======================================================================-->
     <!-- zero                                                                  -->
