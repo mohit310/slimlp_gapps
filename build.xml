@@ -181,6 +181,16 @@
                 <replaceregex pattern="@file.list@" replace="${file.list.mini}" flags="i"/>
             </filterchain>
         </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
+            </filterchain>
+        </copy>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
+            </filterchain>
+        </copy>
 
         <antcall target="ZipAndSigning">
             <param name="hfile.name" value="${file.name.mini}"/>
@@ -232,6 +242,16 @@
                 <replaceregex pattern="@file.list@" replace="${file.list.normal}" flags="i"/>
             </filterchain>
         </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
+            </filterchain>
+        </copy>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
+            </filterchain>
+        </copy>
 
         <antcall target="ZipAndSigning">
             <param name="hfile.name" value="${file.name.normal}"/>
@@ -274,6 +294,16 @@
         <copy file="${app.dir}/extras/80-gapps.sh" todir="${work.dir}/system/addon.d">
             <filterchain>
                 <replaceregex pattern="@file.list@" replace="${file.list.full}" flags="i"/>
+            </filterchain>
+        </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
+            </filterchain>
+        </copy>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
             </filterchain>
         </copy>
 
