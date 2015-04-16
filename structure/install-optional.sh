@@ -17,6 +17,12 @@ if (grep -qi "shamu" /proc/cpuinfo ); then
   cp -a /tmp/shamu/* /system/
 fi
 
+if (grep -qi "msm8974" /proc/cpuinfo ); then
+  echo "Installing Shamu-specific google bits for OnePlus"
+  cp -a /tmp/common/* /system/
+  cp -a /tmp/shamu/* /system/
+fi
+
 if (grep -qi "manta" /proc/cpuinfo ); then
   echo "Installing Manta-specific google bits"
   cp -a /tmp/common/* /system/
@@ -42,6 +48,9 @@ fi
 good_ffc_device() {
   if [ -f /sdcard/.forcefaceunlock ]; then
     return 0
+  fi
+  if cat /proc/cpuinfo |grep -q msm8974; then
+      return 0
   fi
   if cat /proc/cpuinfo |grep -q Victory; then
     return 1
