@@ -160,8 +160,9 @@
                 <exclude name="system/app/Wallet/**"/>
                 <exclude name="system/tts/**"/>
                 <exclude name="system/usr/**"/>
-                <exclude name="optional/face/**"/>
+                <exclude name="optional/**"/>
                 <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
+                <exclude name="install-optional.sh/"/>
             </fileset>
         </copy>
         <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
