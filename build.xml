@@ -177,6 +177,9 @@
             <filterchain>
                 <replaceregex pattern="@package@" replace="mini" flags="i"/>
                 <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
+                <linecontains negate="true">
+                    <contains value="#zero"/>
+                </linecontains>
             </filterchain>
         </copy>
 
