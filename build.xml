@@ -67,6 +67,7 @@
                 <include name="system/etc/**"/>
                 <include name="system/framework/**"/>
                 <include name="system/lib/**"/>
+                <include name="system/vendor/**"/>
                 <include name="system/priv-app/GoogleBackupTransport/**"/>
                 <include name="system/priv-app/GoogleFeedback/**"/>
                 <include name="system/priv-app/GoogleLoginService/**"/>
@@ -78,7 +79,6 @@
                 <include name="system/priv-app/MaxxAudioFX/**"/>
                 <include name="system/app/CameraNext/**"/>
                 <include name="system/priv-app/GmsCore/**"/>
-                <include name="system/vendor/**"/>
                 <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
             </fileset>
         </copy>
@@ -160,8 +160,9 @@
                 <exclude name="system/app/Wallet/**"/>
                 <exclude name="system/tts/**"/>
                 <exclude name="system/usr/**"/>
-                <exclude name="optional/face/**"/>
                 <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
+                <exclude name="optional/**"/>
+                <exclude name="install-optional.sh/"/>
             </fileset>
         </copy>
         <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
@@ -275,8 +276,8 @@
         <!-- copy files -->
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
-                <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
                 <exclude name="system/app/CameraGoogle/**"/>
+                <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
             </fileset>
         </copy>
         <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
