@@ -93,7 +93,7 @@
         </copy>
 
         <!-- generate backup script -->
-        <fileset id="item.file" dir="${work.dir}/system" includes="**/*.*"/>
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
         <pathconvert refid="item.file" property="file.list.zero" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=''/>
         </pathconvert>
@@ -176,7 +176,7 @@
         </copy>
 
         <!-- generate backup script -->
-        <fileset id="item.file" dir="${work.dir}/system" includes="**/*.*"/>
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
         <pathconvert refid="item.file" property="file.list.mini" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=''/>
         </pathconvert>
@@ -237,7 +237,7 @@
         </copy>
 
         <!-- generate backup script -->
-        <fileset id="item.file" dir="${work.dir}/system" includes="**/*.*"/>
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
         <pathconvert refid="item.file" property="file.list.normal" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=''/>
         </pathconvert>
@@ -291,7 +291,7 @@
         </copy>
 
         <!-- generate backup script -->
-        <fileset id="item.file" dir="${work.dir}/system" includes="**/*.*"/>
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
         <pathconvert refid="item.file" property="file.list.full" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=''/>
         </pathconvert>
@@ -321,7 +321,7 @@
     <!-- generate clean up list                                                     -->
     <!--=======================================================================-->
     <target name="generateCleanUpList">
-        <fileset id="cleanup.file" dir="${structure.dir}/system" includes="**/*.*"/>
+        <fileset id="cleanup.file" dir="${structure.dir}/system" includes="**/*"/>
         <pathconvert refid="cleanup.file" property="cleanup.list" pathsep="&quot;,&#10;&quot;" dirsep="/">
             <map from="${structure.dir}/system/" to="/system/"/>
         </pathconvert>
