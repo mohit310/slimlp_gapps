@@ -11,6 +11,8 @@
 <!--                                                                         -->
 <!--    builds the gapps                                                     -->
 <!--                                                                         -->
+<!--  AUTHORS:                                                               -->
+<!--                                                                         -->
 <!--=========================================================================-->
 <project name="buildGapps"
          default="buildAll"
@@ -40,7 +42,7 @@
     <!-- complete build                                                        -->
     <!--=======================================================================-->
     <target name="buildAll"
-            depends="cleanupBefore,initit,generateCleanUpList,buildZero,buildMini,buildNormal,buildFull,cleanupAfter"
+            depends="cleanupBefore,initit,generateCleanUpList,buildZeroWakeLockFix,buildMiniWakeLockFix,buildNormalWakeLockFix,buildFullWakeLockFix,buildZero,buildMini,buildNormal,buildFull,cleanupAfter"
             description="execute complete build"/>
 
     <!--=======================================================================-->
@@ -79,7 +81,6 @@
                 <include name="system/priv-app/MaxxAudioFX/**"/>
                 <include name="system/app/CameraNext/**"/>
                 <include name="system/priv-app/PrebuiltGmsCore/**"/>
-                <exclude name="system/priv-app/GmsCore/**"/>
             </fileset>
         </copy>
         <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
@@ -102,22 +103,12 @@
                 <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
             </filterchain>
         </copy>
-        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d">
-            <filterchain>
-                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
-            </filterchain>
-        </copy>
-        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d">
-            <filterchain>
-                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
-            </filterchain>
-        </copy>
-
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d"/>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d"/>
         <!-- zip and sign it -->
         <antcall target="ZipAndSigning">
             <param name="hfile.name" value="${file.name.zero}"/>
         </antcall>
-
     </target>
 
     <!--=======================================================================-->
@@ -160,8 +151,8 @@
                 <exclude name="system/app/Wallet/**"/>
                 <exclude name="system/tts/**"/>
                 <exclude name="system/usr/**"/>
-                <exclude name="system/priv-app/GmsCore/**"/>
                 <exclude name="optional/**"/>
+                <exclude name="system/priv-app/GmsCore/**"/>
                 <exclude name="install-optional.sh/"/>
             </fileset>
         </copy>
@@ -185,16 +176,8 @@
                 <replaceregex pattern="@file.list@" replace="${file.list.mini}" flags="i"/>
             </filterchain>
         </copy>
-        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d">
-            <filterchain>
-                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
-            </filterchain>
-        </copy>
-        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d">
-            <filterchain>
-                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
-            </filterchain>
-        </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d"/>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d"/>
 
         <antcall target="ZipAndSigning">
             <param name="hfile.name" value="${file.name.mini}"/>
@@ -246,16 +229,8 @@
                 <replaceregex pattern="@file.list@" replace="${file.list.normal}" flags="i"/>
             </filterchain>
         </copy>
-        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d">
-            <filterchain>
-                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
-            </filterchain>
-        </copy>
-        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d">
-            <filterchain>
-                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
-            </filterchain>
-        </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d"/>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d"/>
 
         <antcall target="ZipAndSigning">
             <param name="hfile.name" value="${file.name.normal}"/>
@@ -300,19 +275,254 @@
                 <replaceregex pattern="@file.list@" replace="${file.list.full}" flags="i"/>
             </filterchain>
         </copy>
-        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d">
-            <filterchain>
-                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
-            </filterchain>
-        </copy>
-        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d">
-            <filterchain>
-                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
-            </filterchain>
-        </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d"/>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d"/>
 
         <antcall target="ZipAndSigning">
             <param name="hfile.name" value="${file.name.full}"/>
+        </antcall>
+
+    </target>
+
+    <!--=======================================================================-->
+    <!-- This one has @Calkulin fix -->
+    <!--=======================================================================-->
+
+    <!--=======================================================================-->
+    <!-- zero                                                                  -->
+    <!--=======================================================================-->
+    <target name="buildZeroWakeLockFix"
+            description="execute zero gapps build">
+        <!-- preparations -->
+        <property environment="env"/>
+        <property name="file.name.zero.wakelock"
+                  value="${build.dir}/Slim_zero_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}-CalkulinWakeLockFix.zip"/>
+        <delete dir="${work.dir}"/>
+        <propertyfile file="${build.dir}/gapps.filenames">
+            <entry key="zerofilename" value="${file.name.zero.wakelock}"/>
+        </propertyfile>
+        <!-- copy files -->
+        <copy todir="${work.dir}">
+            <fileset dir="${structure.dir}">
+                <include name="META-INF/**"/>
+                <include name="system/app/ConfigUpdater/**"/>
+                <include name="system/app/ExchangeServices/**"/>
+                <include name="system/app/GoogleCalendarSyncAdapter/**"/>
+                <include name="system/app/GoogleContactsSyncAdapter/**"/>
+                <include name="system/etc/**"/>
+                <include name="system/framework/**"/>
+                <include name="system/lib/**"/>
+                <include name="system/vendor/**"/>
+                <include name="system/priv-app/GoogleBackupTransport/**"/>
+                <include name="system/priv-app/GoogleFeedback/**"/>
+                <include name="system/priv-app/GoogleLoginService/**"/>
+                <include name="system/priv-app/GoogleOneTimeInitializer/**"/>
+                <include name="system/priv-app/GooglePartnerSetup/**"/>
+                <include name="system/priv-app/GoogleServicesFramework/**"/>
+                <include name="system/priv-app/Phonesky/**"/>
+                <include name="system/priv-app/SetupWizard/**"/>
+                <include name="system/priv-app/MaxxAudioFX/**"/>
+                <include name="system/app/CameraNext/**"/>
+                <include name="system/priv-app/GmsCore/**"/>
+            </fileset>
+        </copy>
+        <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
+            <filterchain>
+                <replaceregex pattern="@package@" replace="zero" flags="i"/>
+                <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
+                <linecontains negate="true">
+                    <contains value="#zero"/>
+                </linecontains>
+            </filterchain>
+        </copy>
+
+        <!-- generate backup script -->
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
+        <pathconvert refid="item.file" property="file.list.zero" pathsep="&#10;" dirsep="/">
+            <map from="${work.dir}/system/" to=''/>
+        </pathconvert>
+        <copy file="${app.dir}/extras/80-gapps.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
+            </filterchain>
+        </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d"/>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d"/>
+        <!-- zip and sign it -->
+        <antcall target="ZipAndSigning">
+            <param name="hfile.name" value="${file.name.zero.wakelock}"/>
+        </antcall>
+    </target>
+
+    <!--=======================================================================-->
+    <!-- mini                                                                  -->
+    <!--=======================================================================-->
+    <target name="buildMiniWakeLockFix"
+            description="execute mini gapps build">
+        <!-- preparations -->
+        <property environment="env"/>
+        <property name="file.name.mini.wakelock"
+                  value="${build.dir}/Slim_mini_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}-CalkulinWakeLockFix.zip"/>
+        <delete dir="${work.dir}"/>
+        <propertyfile file="${build.dir}/gapps.filenames">
+            <entry key="minifilename" value="${file.name.mini.wakelock}"/>
+        </propertyfile>
+        <!-- copy files -->
+        <copy todir="${work.dir}">
+            <fileset dir="${structure.dir}">
+                <exclude name="system/app/Books/**"/>
+                <exclude name="system/app/CalendarGoogle/**"/>
+                <exclude name="system/app/CameraGoogle/**"/>
+                <exclude name="system/app/Chrome/**"/>
+                <exclude name="system/app/CloudPrint/**"/>
+                <exclude name="system/app/Docs/**"/>
+                <exclude name="system/app/Drive/**"/>
+                <exclude name="system/app/Games/**"/>
+                <exclude name="system/app/GenieWidget/**"/>
+                <exclude name="system/app/GoogleHome/**"/>
+                <exclude name="system/app/GoogleTTS/**"/>
+                <exclude name="system/app/Keep/**"/>
+                <exclude name="system/app/Keyboard/**"/>
+                <exclude name="system/app/Maps/**"/>
+                <exclude name="system/app/Messenger/**"/>
+                <exclude name="system/app/Movies/**"/>
+                <exclude name="system/app/Newsstand/**"/>
+                <exclude name="system/app/Sheets/**"/>
+                <exclude name="system/app/Slides/**"/>
+                <exclude name="system/app/Street/**"/>
+                <exclude name="system/app/Translate/**"/>
+                <exclude name="system/app/Wallet/**"/>
+                <exclude name="system/tts/**"/>
+                <exclude name="system/usr/**"/>
+                <exclude name="optional/**"/>
+                <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
+                <exclude name="install-optional.sh/"/>
+            </fileset>
+        </copy>
+        <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
+            <filterchain>
+                <replaceregex pattern="@package@" replace="mini" flags="i"/>
+                <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
+                <linecontains negate="true">
+                    <contains value="#zero"/>
+                </linecontains>
+            </filterchain>
+        </copy>
+
+        <!-- generate backup script -->
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
+        <pathconvert refid="item.file" property="file.list.mini" pathsep="&#10;" dirsep="/">
+            <map from="${work.dir}/system/" to=''/>
+        </pathconvert>
+        <copy file="${app.dir}/extras/80-gapps.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.mini}" flags="i"/>
+            </filterchain>
+        </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d"/>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d"/>
+
+        <antcall target="ZipAndSigning">
+            <param name="hfile.name" value="${file.name.mini.wakelock}"/>
+        </antcall>
+
+    </target>
+
+    <!--=======================================================================-->
+    <!-- normal                                                                -->
+    <!--=======================================================================-->
+    <target name="buildNormalWakeLockFix"
+            description="execute normal gapps build">
+        <!-- preparations -->
+        <property environment="env"/>
+        <property name="file.name.normal.wakelock"
+                  value="${build.dir}/Slim_normal_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}-CalkulinWakeLockFix.zip"/>
+        <delete dir="${work.dir}"/>
+        <propertyfile file="${build.dir}/gapps.filenames">
+            <entry key="normalfilename" value="${file.name.normal.wakelock}"/>
+        </propertyfile>
+        <!-- copy files -->
+        <copy todir="${work.dir}">
+            <fileset dir="${structure.dir}">
+                <exclude name="system/app/Books/**"/>
+                <exclude name="system/app/Docs/**"/>
+                <exclude name="system/app/Games/**"/>
+                <exclude name="system/app/Movies/**"/>
+                <exclude name="system/app/Newsstand/**"/>
+                <exclude name="system/app/Sheets/**"/>
+                <exclude name="system/app/Slides/**"/>
+                <exclude name="system/app/CameraGoogle/**"/>
+                <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
+            </fileset>
+        </copy>
+        <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
+            <filterchain>
+                <replaceregex pattern="@package@" replace="normal" flags="i"/>
+                <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
+            </filterchain>
+        </copy>
+
+        <!-- generate backup script -->
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
+        <pathconvert refid="item.file" property="file.list.normal" pathsep="&#10;" dirsep="/">
+            <map from="${work.dir}/system/" to=''/>
+        </pathconvert>
+        <copy file="${app.dir}/extras/80-gapps.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.normal}" flags="i"/>
+            </filterchain>
+        </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d"/>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d"/>
+
+        <antcall target="ZipAndSigning">
+            <param name="hfile.name" value="${file.name.normal.wakelock}"/>
+        </antcall>
+
+    </target>
+
+    <!--=======================================================================-->
+    <!-- full                                                               -->
+    <!--=======================================================================-->
+    <target name="buildFullWakeLockFix"
+            description="execute full gapps build">
+        <!-- preparations -->
+        <property environment="env"/>
+        <property name="file.name.full.wakelock"
+                  value="${build.dir}/Slim_full_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}-CalkulinWakeLockFix.zip"/>
+        <delete dir="${work.dir}"/>
+        <propertyfile file="${build.dir}/gapps.filenames">
+            <entry key="fullfilename" value="${file.name.full.wakelock}"/>
+        </propertyfile>
+        <!-- copy files -->
+        <copy todir="${work.dir}">
+            <fileset dir="${structure.dir}">
+                <exclude name="system/app/CameraGoogle/**"/>
+                <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
+            </fileset>
+        </copy>
+        <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
+            <filterchain>
+                <replaceregex pattern="@package@" replace="full" flags="i"/>
+                <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
+            </filterchain>
+        </copy>
+
+        <!-- generate backup script -->
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
+        <pathconvert refid="item.file" property="file.list.full" pathsep="&#10;" dirsep="/">
+            <map from="${work.dir}/system/" to=''/>
+        </pathconvert>
+        <copy file="${app.dir}/extras/80-gapps.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.full}" flags="i"/>
+            </filterchain>
+        </copy>
+        <copy file="${app.dir}/extras/80-maxxaudio.sh" todir="${work.dir}/system/addon.d"/>
+        <copy file="${app.dir}/extras/90-CamSettings.sh" todir="${work.dir}/system/addon.d"/>
+
+        <antcall target="ZipAndSigning">
+            <param name="hfile.name" value="${file.name.full.wakelock}"/>
         </antcall>
 
     </target>
