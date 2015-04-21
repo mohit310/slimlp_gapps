@@ -78,8 +78,8 @@
                 <include name="system/priv-app/SetupWizard/**"/>
                 <include name="system/priv-app/MaxxAudioFX/**"/>
                 <include name="system/app/CameraNext/**"/>
-                <include name="system/priv-app/GmsCore/**"/>
-                <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
+                <include name="system/priv-app/PrebuiltGmsCore/**"/>
+                <exclude name="system/priv-app/GmsCore/**"/>
             </fileset>
         </copy>
         <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
@@ -160,7 +160,7 @@
                 <exclude name="system/app/Wallet/**"/>
                 <exclude name="system/tts/**"/>
                 <exclude name="system/usr/**"/>
-                <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
+                <exclude name="system/priv-app/GmsCore/**"/>
                 <exclude name="optional/**"/>
                 <exclude name="install-optional.sh/"/>
             </fileset>
@@ -226,7 +226,7 @@
                 <exclude name="system/app/Sheets/**"/>
                 <exclude name="system/app/Slides/**"/>
                 <exclude name="system/app/CameraGoogle/**"/>
-                <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
+                <exclude name="system/priv-app/GmsCore/**"/>
             </fileset>
         </copy>
         <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
@@ -280,7 +280,7 @@
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
                 <exclude name="system/app/CameraGoogle/**"/>
-                <exclude name="system/priv-app/PrebuiltGmsCore/**"/>
+                <exclude name="system/priv-app/GmsCore/**"/>
             </fileset>
         </copy>
         <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
