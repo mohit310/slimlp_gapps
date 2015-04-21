@@ -7,7 +7,6 @@ assert(getprop("ro.product.name") == "bacon" || abort("This package is for Onepl
 ui_print("Removing old GApps...");
 delete_recursive("/system/app/AudioFX", "/system/app/DSPManager");
 delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager");
-delete_recursive("/system/priv-app/GmsCore");
 delete(
 "/system/addon.d/82-full_gapps.sh",
 "/system/addon.d/81-normal_gapps.sh",
@@ -18,10 +17,6 @@ delete(
 "/system/addon.d/71-gapps-faceunlock.sh",
 "/system/app/FaceLock/FaceLock.apk",
 "/system/app/FaceLock/lib/arm/libfacelock_jni.so",
-"/system/etc/permissions/com.google.android.camera2.xml",
-"/system/etc/waves/default.mps",
-"/system/etc/media_profiles.xml",
-"/system/framework/com.google.android.camera2.jar",
 "/system/lib/libgcam.so",
 "/system/lib/libgcam_swig_jni.so",
 "/system/lib/libjni_eglfence.so",
@@ -29,7 +24,6 @@ delete(
 "/system/lib/libjni_mosaic.so",
 "/system/lib/liblightcycle.so",
 "/system/lib/libnativehelper_compat.so",
-"/system/lib/libjni_mosaic.so",
 "/system/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.8/landmark_group_meta_data.bin",
 "/system/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.8/left_eye-y0-yi45-p0-pi45-r0-ri20.lg_32-tree7-wmd.bin",
 "/system/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.8/nose_base-y0-yi45-p0-pi45-r0-ri20.lg_32-tree7-wmd.bin",
