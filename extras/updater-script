@@ -3,11 +3,11 @@ ui_print("SlimLP By MOHIT310 @package@ GApps for Android 5.0");
 ui_print("******************************************************");
 
 run_program("/sbin/busybox", "mount", "/system");
-assert(getprop("ro.build.version.sdk") == "21" || abort("This package is for version: 5.0.x"));
+assert(getprop("ro.product.name") == "bacon" || abort("This package is for Oneplus"));
 ui_print("Removing old GApps...");
 delete_recursive("/system/app/AudioFX", "/system/app/DSPManager");
 delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager");
-delete_recursive("/system/priv-app/PrebuiltGmsCore");
+delete_recursive("/system/priv-app/GmsCore");
 delete(
 "/system/addon.d/82-full_gapps.sh",
 "/system/addon.d/81-normal_gapps.sh",
