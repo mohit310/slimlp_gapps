@@ -456,7 +456,7 @@
     <!-- zip and sign it                                                       -->
     <!--=======================================================================-->
     <target name="ZipAndSigning">
-        <zip destfile="${build.dir}/unsigned.zip" basedir="${work.dir}"></zip>
+        <zip destfile="${build.dir}/unsigned.zip" basedir="${work.dir}"/>
         <echo message="Signing gapps"/>
         <java dir="${build.dir}" fork="true" failonerror="true" maxmemory="1536m" jar="${sign.jar}">
             <arg value="-w"/>
