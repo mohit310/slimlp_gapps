@@ -404,18 +404,22 @@
         </copy>
 
         <path id="item.file">
-            <fileset dir="${work.dir}/system"/>
-            <fileset dir="${work.dir}/optional/" erroronmissingdir="false"/>
+            <fileset dir="${work.dir}/system">
+                <exclude name="**/*.sh"/>
+            </fileset>
+            <fileset dir="${work.dir}/optional/" erroronmissingdir="false">
+                <exclude name="**/*.sh"/>
+            </fileset>
         </path>
 
         <pathconvert refid="item.file" property="file.list.backup" pathsep="&#10;" dirsep="/">
-            <map from="${work.dir}/system/" to="/system/"/>
-            <map from="${work.dir}/optional/common/" to="/system/"/>
-            <map from="${work.dir}/optional/face/" to="/system/"/>
-            <map from="${work.dir}/optional/hammerhead/" to="/system/"/>
-            <map from="${work.dir}/optional/manta/" to="/system/"/>
-            <map from="${work.dir}/optional/shamu/" to="/system/"/>
-            <map from="${work.dir}/optional/tuna/" to="/system/"/>
+            <map from="${work.dir}/system/" to=""/>
+            <map from="${work.dir}/optional/common/" to=""/>
+            <map from="${work.dir}/optional/face/" to=""/>
+            <map from="${work.dir}/optional/hammerhead/" to=""/>
+            <map from="${work.dir}/optional/manta/" to=""/>
+            <map from="${work.dir}/optional/shamu/" to=""/>
+            <map from="${work.dir}/optional/tuna/" to=""/>
         </pathconvert>
         <replaceregexp match="@file.list@" replace="${file.list.backup}" flags="i" byline="true">
             <fileset dir="${work.dir}/system/addon.d">
