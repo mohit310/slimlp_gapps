@@ -7,6 +7,7 @@ assert(getprop("ro.product.name") == "bacon" || abort("This package is for Onepl
 ui_print("Removing old GApps...");
 delete_recursive("/system/app/AudioFX", "/system/app/DSPManager");
 delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager");
+delete_recursive("/system/priv-app/GmsCore");
 delete(
 "/system/addon.d/82-full_gapps.sh",
 "/system/addon.d/81-normal_gapps.sh",
