@@ -84,7 +84,7 @@
         </copy>
 
 
-        <antcall target="createUpdaterScript"/>
+        <antcall target="createUpdaterScript-zero"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
 
         <!-- zip and sign it -->
