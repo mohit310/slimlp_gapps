@@ -79,6 +79,7 @@
                 <include name="system/priv-app/SetupWizard/**"/>
                 <include name="system/priv-app/MaxxAudioFX/**"/>
                 <include name="system/app/CameraNext/**"/>
+                <include name="system/app/WebView/**"/>
                 <exclude name="system/etc/g.prop"/>
             </fileset>
         </copy>
