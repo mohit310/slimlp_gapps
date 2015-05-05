@@ -78,6 +78,7 @@
                 <include name="system/priv-app/PrebuiltGmsCore/**"/>
                 <include name="system/priv-app/SetupWizard/**"/>
                 <include name="system/priv-app/MaxxAudioFX/**"/>
+                <include name="system/app/WebView/**"/>
                 <include name="system/app/CameraNext/**"/>
                 <exclude name="system/etc/g.prop"/>
             </fileset>
