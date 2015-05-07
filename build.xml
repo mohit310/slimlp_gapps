@@ -77,10 +77,9 @@
                 <include name="system/priv-app/Phonesky/**"/>
                 <include name="system/priv-app/PrebuiltGmsCore/**"/>
                 <include name="system/priv-app/SetupWizard/**"/>
-                <include name="system/priv-app/SELinuxModeChanger/**"/>
-                <include name="system/app/WebView/**"/>
+                <include name="system/priv-app/Viper4Android/**"/>
                 <include name="system/app/CameraNext/**"/>
-                <exclude name="system/etc/g.prop"/>
+                <include name="system/su.d/**"/>
             </fileset>
         </copy>
 
@@ -133,7 +132,6 @@
                 <exclude name="system/usr/**"/>
                 <exclude name="optional/**"/>
                 <exclude name="install-optional.sh/"/>
-                <exclude name="system/etc/g.prop"/>
             </fileset>
         </copy>
 
@@ -167,7 +165,6 @@
                 <exclude name="system/app/Sheets/**"/>
                 <exclude name="system/app/Slides/**"/>
                 <exclude name="system/app/CameraGoogle/**"/>
-                <exclude name="system/etc/g.prop"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
@@ -193,7 +190,6 @@
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
                 <exclude name="system/app/CameraGoogle/**"/>
-                <exclude name="system/etc/g.prop"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
