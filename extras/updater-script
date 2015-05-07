@@ -11,6 +11,7 @@ delete(
 "/system/addon.d/82-full_gapps.sh",
 "/system/addon.d/81-normal_gapps.sh",
 "/system/su.d/permissive.sh",
+"/system/lib/soundfx/libv4a_fx_ics.so",
 "@cleanup.list@"
 );
 
