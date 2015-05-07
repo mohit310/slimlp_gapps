@@ -3,7 +3,6 @@ ui_print("SlimLP By MOHIT310 @package@ GApps for Android 5.1");
 ui_print("******************************************************");
 
 run_program("/sbin/busybox", "mount", "/system");
-run_program("/system/bin/setenforce","0");
 ui_print("Removing old GApps...");
 delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/MaxxAudioFX");
 delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/MaxxAudioFX");
