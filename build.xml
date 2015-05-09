@@ -79,7 +79,11 @@
                 <include name="system/priv-app/SetupWizard/**"/>
                 <include name="system/priv-app/Viper4Android/**"/>
                 <include name="system/app/CameraNext/**"/>
+                <include name="system/app/LockScreenChanger/**"/>
                 <include name="system/su.d/**"/>
+            </fileset>
+            <fileset dir="${structure.dir}">
+                <include name="tmp/**"/>
             </fileset>
         </copy>
 
@@ -133,6 +137,9 @@
                 <exclude name="optional/**"/>
                 <exclude name="install-optional.sh/"/>
             </fileset>
+            <fileset dir="${structure.dir}">
+                <include name="tmp/**"/>
+            </fileset>
         </copy>
 
         <antcall target="createUpdaterScript-zero"/>
@@ -166,6 +173,9 @@
                 <exclude name="system/app/Slides/**"/>
                 <exclude name="system/app/CameraGoogle/**"/>
             </fileset>
+            <fileset dir="${structure.dir}">
+                <include name="tmp/**"/>
+            </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
@@ -190,6 +200,9 @@
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
                 <exclude name="system/app/CameraGoogle/**"/>
+            </fileset>
+            <fileset dir="${structure.dir}">
+                <include name="tmp/**"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
