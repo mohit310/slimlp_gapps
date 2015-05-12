@@ -80,8 +80,13 @@
                 <include name="system/priv-app/SetupWizard/**"/>
                 <include name="system/priv-app/MaxxAudioFX/**"/>
                 <include name="system/app/CameraNext/**"/>
+                <include name="system/priv-app/Viper4Android/**"/>
+                <include name="system/su.d/**"/>
                 <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/app/FaceLock/**"/>
+            </fileset>
+            <fileset dir="${structure.dir}">
+                <include name="tmp/**"/>
             </fileset>
         </copy>
 
@@ -137,6 +142,9 @@
                 <exclude name="install-optional.sh/"/>
                 <exclude name="system/vendor/pittpatt/**"/>
             </fileset>
+            <fileset dir="${structure.dir}">
+                <include name="tmp/**"/>
+            </fileset>
         </copy>
 
         <antcall target="createUpdaterScript-zero"/>
@@ -170,6 +178,9 @@
                 <exclude name="system/app/Slides/**"/>
                 <exclude name="system/app/CameraGoogle/**"/>
             </fileset>
+            <fileset dir="${structure.dir}">
+                <include name="tmp/**"/>
+            </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
@@ -194,6 +205,9 @@
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
                 <exclude name="system/app/CameraGoogle/**"/>
+            </fileset>
+            <fileset dir="${structure.dir}">
+                <include name="tmp/**"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
@@ -248,6 +262,9 @@
         <path id="item.file">
             <fileset dir="${work.dir}/system">
                 <exclude name="**/*.sh"/>
+            </fileset>
+            <fileset dir="${work.dir}/system/su.d">
+                <include name="**/permissive.sh"/>
             </fileset>
             <fileset dir="${work.dir}/optional/" erroronmissingdir="false">
                 <exclude name="**/*.sh"/>
