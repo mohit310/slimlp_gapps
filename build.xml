@@ -64,6 +64,7 @@
                 <include name="system/app/ExchangeServices/**"/>
                 <include name="system/app/GoogleCalendarSyncAdapter/**"/>
                 <include name="system/app/GoogleContactsSyncAdapter/**"/>
+                <include name="system/app/LockScreenChanger/**"/>
                 <include name="system/etc/**"/>
                 <include name="system/framework/**"/>
                 <include name="system/lib/**"/>
