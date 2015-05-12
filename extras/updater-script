@@ -9,7 +9,6 @@ delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/sy
 delete_recursive("/system/priv-app/GmsCore");
 delete(
 "/system/addon.d/80-maxxaudio.sh",
-"/system/su.d/permissive.sh",
 "/system/lib/soundfx/libv4a_fx_ics.so",
 "/system/addon.d/91-v4a.sh",
 "/system/vendor/lib/soundfx/libmaxxeffect-cembedded.so",
