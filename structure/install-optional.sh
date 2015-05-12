@@ -17,12 +17,6 @@ if (grep -qi "shamu" /proc/cpuinfo ); then
   cp -a /tmp/shamu/* /system/
 fi
 
-if (grep -qi "msm8974" /proc/cpuinfo ); then
-  echo "Installing Shamu-specific google bits for OnePlus"
-  cp -a /tmp/common/* /system/
-  cp -a /tmp/shamu/* /system/
-fi
-
 if (grep -qi "manta" /proc/cpuinfo ); then
   echo "Installing Manta-specific google bits"
   cp -a /tmp/common/* /system/
@@ -39,39 +33,8 @@ if (grep -qi "deb" /proc/cpuinfo ); then
   cp -a /tmp/common/* /system/
 fi
 
-if (grep -qi "tuna" /proc/cpuinfo ); then
-  echo "Installing Tuna-specific google bits"
+if (grep -qi "msm8974" /proc/cpuinfo ); then
+  echo "Installing Shamu-specific google bits for OnePlus"
   cp -a /tmp/common/* /system/
-  cp -a /tmp/tuna/* /system/
+  cp -a /tmp/shamu/* /system/
 fi
-
-good_ffc_device() {
-  if [ -f /sdcard/.forcefaceunlock ]; then
-    return 0
-  fi
-  if cat /proc/cpuinfo |grep -q msm8974; then
-      return 0
-  fi
-  if cat /proc/cpuinfo |grep -q Victory; then
-    return 1
-  fi
-  if cat /proc/cpuinfo |grep -q herring; then
-    return 1
-  fi
-  if cat /proc/cpuinfo |grep -q sun4i; then
-    return 1
-  fi
-  return 0
-}
-
-if good_ffc_device && [ -e /system/etc/permissions/android.hardware.camera.front.xml ]; then
-  echo "Installing face detection support"
-  cp -a /tmp/face/* /system/
-  chmod 755 /system/addon.d/71-gapps-faceunlock.sh
-elif  [ -d /system/vendor/pittpatt/ ]; then
-  rm -rf /system/vendor/pittpatt/
-  rm  -f /system/app/FaceLock.apk
-  rm  -f /system/lib/libfacelock_jni.so
-  rm  -f /system/addon.d/71-gapps-faceunlock.sh
-fi
-rm -rf /tmp/face
