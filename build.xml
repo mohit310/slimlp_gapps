@@ -79,8 +79,8 @@
                 <include name="system/priv-app/SetupWizard/**"/>
                 <include name="system/priv-app/MaxxAudioFX/**"/>
                 <include name="system/app/CameraNext/**"/>
-                <include name="system/app/WebView/**"/>
-                <exclude name="system/etc/g.prop"/>
+                <exclude name="system/vendor/pittpatt/**"/>
+                <exclude name="system/app/FaceLock/**"/>
             </fileset>
         </copy>
 
@@ -114,6 +114,7 @@
                 <exclude name="system/app/CloudPrint/**"/>
                 <exclude name="system/app/Docs/**"/>
                 <exclude name="system/app/Drive/**"/>
+                <exclude name="system/app/FaceLock/**"/>
                 <exclude name="system/app/Games/**"/>
                 <exclude name="system/app/GenieWidget/**"/>
                 <exclude name="system/app/GoogleHome/**"/>
@@ -133,7 +134,7 @@
                 <exclude name="system/usr/**"/>
                 <exclude name="optional/**"/>
                 <exclude name="install-optional.sh/"/>
-                <exclude name="system/etc/g.prop"/>
+                <exclude name="system/vendor/pittpatt/**"/>
             </fileset>
         </copy>
 
@@ -167,7 +168,6 @@
                 <exclude name="system/app/Sheets/**"/>
                 <exclude name="system/app/Slides/**"/>
                 <exclude name="system/app/CameraGoogle/**"/>
-                <exclude name="system/etc/g.prop"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
@@ -193,7 +193,6 @@
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
                 <exclude name="system/app/CameraGoogle/**"/>
-                <exclude name="system/etc/g.prop"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
