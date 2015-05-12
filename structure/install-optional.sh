@@ -33,12 +33,6 @@ if (grep -qi "deb" /proc/cpuinfo ); then
   cp -a /tmp/common/* /system/
 fi
 
-if (grep -qi "tuna" /proc/cpuinfo ); then
-  echo "Installing Tuna-specific google bits"
-  cp -a /tmp/common/* /system/
-  cp -a /tmp/tuna/* /system/
-fi
-
 if (grep -qi "msm8974" /proc/cpuinfo ); then
   echo "Installing Shamu-specific google bits for OnePlus"
   cp -a /tmp/common/* /system/
