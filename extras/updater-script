@@ -16,8 +16,8 @@ ifelse(
     file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "0",
     (
         ui_print("Removing old GApps...");
-        delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android");
-        delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android");
+        delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/MaxxAudioFX");
+        delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/MaxxAudioFX");
         delete_recursive("/system/priv-app/GmsCore");
         delete(
         "/system/addon.d/80-maxxaudio.sh",
