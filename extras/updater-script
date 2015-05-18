@@ -16,7 +16,6 @@ ifelse(
     file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "0",
     (
         ui_print("Removing old GApps...");
-        delete("/tmp/size_check.sh","/tmp/apps_space.prop","/tmp/build.prop");
         delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android");
         delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android");
         delete_recursive("/system/priv-app/GmsCore");
@@ -58,7 +57,6 @@ ifelse(
 ifelse(
     file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "1",
     (
-        delete("/tmp/size_check.sh","/tmp/apps_space.prop","/tmp/build.prop");
         ui_print("* not enough free space on system *");
         ui_print("plz try a smaller package.");
         ui_print("******* gapps Installation failed *******");
@@ -68,3 +66,6 @@ ifelse(
         run_program("/sbin/busybox", "umount", "/system");
     )
 );
+
+delete("/tmp/size_check.sh","/tmp/apps_space.prop","/tmp/build.prop");
+ui_print("---------------------DONE--------------------------");
