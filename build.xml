@@ -40,11 +40,22 @@
     </tstamp>
 
     <!--=======================================================================-->
+    <!-- Space task definition                                                 -->
+    <!--=======================================================================-->
+    <path id="lib.path">
+        <fileset dir="lib" includes="**/*.jar"/>
+    </path>
+    <taskdef name="space" classname="com.mk.SpaceTask" classpathref="lib.path"/>
+
+    <!--=======================================================================-->
     <!-- complete build                                                        -->
     <!--=======================================================================-->
     <target name="buildAll"
             depends="cleanupBefore,initit,generateCleanUpList,buildZero,buildMini,buildNormal,buildFull,cleanupAfter"
             description="execute complete build"/>
+    <!--<target name="buildAll" depends="space"/>-->
+
+
 
     <!--=======================================================================-->
     <!-- zero                                                                  -->
@@ -80,6 +91,7 @@
                 <include name="system/priv-app/SetupWizard/**"/>
                 <include name="system/priv-app/MaxxAudioFX/**"/>
                 <include name="system/app/CameraNext/**"/>
+                <include name="size_check.sh/"/>
                 <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/app/FaceLock/**"/>
             </fileset>
@@ -253,6 +265,11 @@
                 <exclude name="**/*.sh"/>
             </fileset>
         </path>
+
+        <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
+            <map from="optional/" to="system/"/>
+        </space>
+        <echo file="${work.dir}/apps.space.properties">${file.size.prop}</echo>
 
         <pathconvert refid="item.file" property="file.list.backup" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=""/>
