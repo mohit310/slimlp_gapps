@@ -40,6 +40,14 @@
     </tstamp>
 
     <!--=======================================================================-->
+    <!-- Space task definition                                                 -->
+    <!--=======================================================================-->
+    <path id="lib.path">
+        <fileset dir="lib" includes="**/*.jar"/>
+    </path>
+    <taskdef name="space" classname="com.mk.SpaceTask" classpathref="lib.path"/>
+
+    <!--=======================================================================-->
     <!-- complete build                                                        -->
     <!--=======================================================================-->
     <target name="buildAll"
@@ -82,6 +90,7 @@
                 <include name="system/app/CameraNext/**"/>
                 <include name="system/priv-app/Viper4Android/**"/>
                 <include name="system/su.d/**"/>
+                <include name="size_check.sh/"/>
                 <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/app/FaceLock/**"/>
             </fileset>
@@ -270,6 +279,11 @@
                 <exclude name="**/*.sh"/>
             </fileset>
         </path>
+
+        <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
+            <map from="/optional" to="/system"/>
+        </space>
+        <echo file="${work.dir}/apps_space.prop">${file.size.prop}</echo>
 
         <pathconvert refid="item.file" property="file.list.backup" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=""/>
