@@ -1,6 +1,6 @@
 #!/sbin/sh
 
-spaceFileName=apps_space.prop
+spaceFileName=/tmp/apps_space.prop
 
 sumZip=0
 sumSystem=0
