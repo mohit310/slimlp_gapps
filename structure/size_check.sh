@@ -1,6 +1,6 @@
 #!/sbin/sh
 
-spaceFileName=apps.space.properties
+spaceFileName=/tmp/apps_space.prop
 
 sumZip=0
 sumSystem=0
@@ -31,4 +31,3 @@ else
  failed=1
 fi
 echo "ro.gapps.install.failed=$failed" >> /tmp/build.prop
-exit 0
