@@ -7,6 +7,7 @@ ui_print("Checking space");
 package_extract_file("size_check.sh", "/tmp/size_check.sh");
 package_extract_file("apps.space.properties", "/tmp/apps.space.properties");
 set_perm(0, 0, 0777, "/tmp/size_check.sh");
+set_perm(0, 0, 0777, "/tmp/apps.space.properties");
 run_program("/tmp/size_check.sh", "");
 ifelse(
     file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "0",
