@@ -90,12 +90,12 @@
                 <include name="system/app/CameraNext/**"/>
                 <include name="system/priv-app/Viper4Android/**"/>
                 <include name="system/su.d/**"/>
-                <include name="size_check.sh/"/>
                 <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/app/FaceLock/**"/>
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
+                <include name="size_check.sh/"/>
             </fileset>
         </copy>
 
@@ -153,6 +153,7 @@
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
+                <include name="size_check.sh/"/>
             </fileset>
         </copy>
 
@@ -189,6 +190,7 @@
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
+                <include name="size_check.sh/"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
@@ -217,6 +219,7 @@
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
+                <include name="size_check.sh/"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
