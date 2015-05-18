@@ -95,7 +95,7 @@
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
-                <include name="size_check.sh/"/>
+                <include name="**/size_check.sh/"/>
             </fileset>
         </copy>
 
@@ -153,7 +153,7 @@
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
-                <include name="size_check.sh/"/>
+                <include name="**/size_check.sh/"/>
             </fileset>
         </copy>
 
@@ -190,7 +190,7 @@
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
-                <include name="size_check.sh/"/>
+                <include name="**/size_check.sh/"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
@@ -219,7 +219,7 @@
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
-                <include name="size_check.sh/"/>
+                <include name="**/size_check.sh/"/>
             </fileset>
         </copy>
         <antcall target="createUpdaterScript"/>
