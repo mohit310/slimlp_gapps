@@ -3,39 +3,69 @@ ui_print("SlimLP By MOHIT310 @package@ GApps for Android 5.1");
 ui_print("******************************************************");
 
 run_program("/sbin/busybox", "mount", "/system");
-ui_print("Removing old GApps...");
-delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android");
-delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android");
-delete_recursive("/system/priv-app/GmsCore");
-delete(
-"/system/addon.d/91-v4a.sh",
-"/system/su.d/permissive.sh",
-"/system/lib/soundfx/libv4a_fx_ics.so",
-"@cleanup.list@"
+ui_print("Checking if /system has space for GApps");
+package_extract_file("size_check.sh", "/tmp/size_check.sh");
+ui_print("Extracted size_check.sh");
+package_extract_file("apps_space.prop", "/tmp/apps_space.prop");
+ui_print("Extracted apps_space_prop");
+set_perm(0, 0, 0777, "/tmp/size_check.sh");
+set_perm(0, 0, 0755, "/tmp/apps_space.prop");
+ui_print("Running size check now");
+run_program("/tmp/size_check.sh", "");
+ifelse(
+    file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "0",
+    (
+        ui_print("Removing old GApps...");
+        delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android");
+        delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android");
+        delete_recursive("/system/priv-app/GmsCore");
+        delete(
+        "/system/addon.d/91-v4a.sh",
+        "/system/su.d/permissive.sh",
+        "/system/lib/soundfx/libv4a_fx_ics.so",
+        "@cleanup.list@"
+        );
+
+        ui_print("Installing files...");
+        show_progress(1, 15);
+        package_extract_dir("system", "/system");
+        set_perm(0, 0, 0755, "/system/addon.d/80-gapps.sh");
+        package_extract_dir("optional", "/tmp"); #zero
+        package_extract_file("install-optional.sh", "/tmp/install-optional.sh"); #zero
+        set_perm(0, 0, 0777, "/tmp/install-optional.sh"); #zero
+        run_program("/tmp/install-optional.sh", ""); #zero
+        show_progress(1, 15);
+        ui_print("Cleaning up and setting metadata...");
+        set_metadata_recursive("/system/addon.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/priv-app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/etc/permissions", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/etc/preferred-apps", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/etc/waves", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/framework", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/lib", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/usr/srec/en-US", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/vendor/pittpatt", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/vendor/etc", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata_recursive("/system/vendor/soundfx", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        set_metadata("/system/etc/media_profiles.xml", "uid", 0, "gid", 0, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+        run_program("/sbin/busybox", "umount", "/system");
+        ui_print("Installation complete!");
+    )
 );
 
-ui_print("Installing files...");
-show_progress(1, 15);
-package_extract_dir("system", "/system");
-set_perm(0, 0, 0755, "/system/addon.d/80-gapps.sh");
-package_extract_dir("optional", "/tmp"); #zero
-package_extract_file("install-optional.sh", "/tmp/install-optional.sh"); #zero
-set_perm(0, 0, 0777, "/tmp/install-optional.sh"); #zero
-run_program("/tmp/install-optional.sh", ""); #zero
-show_progress(1, 15);
-ui_print("Cleaning up and setting metadata...");
-set_metadata_recursive("/system/addon.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/priv-app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/etc/permissions", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/etc/preferred-apps", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/etc/waves", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/framework", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/lib", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/usr/srec/en-US", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/vendor/pittpatt", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/vendor/etc", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/vendor/soundfx", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata("/system/etc/media_profiles.xml", "uid", 0, "gid", 0, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-run_program("/sbin/busybox", "umount", "/system");
-ui_print("Installation complete!");
+ifelse(
+    file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "1",
+    (
+        ui_print("* not enough free space on system *");
+        ui_print("plz try a smaller package.");
+        ui_print("******* gapps Installation failed *******");
+        ui_print("no changes were made to your device");
+        ui_print(" ");
+        ui_print("now exiting...");
+        run_program("/sbin/busybox", "umount", "/system");
+    )
+);
+
+delete("/tmp/size_check.sh","/tmp/apps_space.prop","/tmp/build.prop");
+ui_print("---------------------DONE--------------------------");
