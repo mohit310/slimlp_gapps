@@ -1,6 +1,6 @@
 #!/sbin/sh
 
-device=$(grep -io '\(mako\|hammerhead\|shamu\|manta\|flo\|deb\)' /proc/cpuinfo)
+device=$(grep -io '\(mako\|hammerhead\|shamu\|manta\|flo\|deb\|msm8974\)' /proc/cpuinfo)
 
 if [ $device ]; then
 echo "Installing specific google bits"
@@ -20,10 +20,11 @@ if [ $device = "manta" ]; then
   echo "Installing Manta-specific google bits"
   cp -a /tmp/manta/* /system/
 fi
-fi
 
-if (grep -qi "msm8974" /proc/cpuinfo ); then
+if [ $device = "msm8974" ]; then
   echo "Installing Shamu-specific google bits for OnePlus"
-  cp -a /tmp/common/* /system/
   cp -a /tmp/shamu/* /system/
 fi
+
+fi
+
