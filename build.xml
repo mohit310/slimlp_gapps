@@ -90,7 +90,6 @@
                 <include name="system/app/CameraNext/**"/>
                 <include name="system/priv-app/Viper4Android/**"/>
                 <include name="system/su.d/**"/>
-                <include name="system/app/SWEBrowser/**"/>
                 <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/app/FaceLock/**"/>
             </fileset>
