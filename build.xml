@@ -91,7 +91,6 @@
                 <include name="system/priv-app/SetupWizard/**"/>
                 <include name="system/priv-app/MaxxAudioFX/**"/>
                 <include name="system/app/CameraNext/**"/>
-                <include name="system/app/SWEBrowser/**"/>
                 <include name="**/size_check.sh"/>
                 <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/app/FaceLock/**"/>
