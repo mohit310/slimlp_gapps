@@ -2,6 +2,29 @@
 
 spaceFileName=/tmp/apps_space.prop
 
+# get file descriptor for output
+OUTFD=$(ps | grep -v grep | grep -oE "update-binary(.*)" | cut -d " " -f 3)
+
+# same as ui_print command in updater_script, for example:
+#
+# ui_print "hello world!"
+#
+# will output "hello world!" to recovery, while
+#
+# ui_print
+#
+# outputs an empty line
+
+ui_print() {
+    if [ "$OUTFD" != "" ]; then
+        echo "ui_print ${1} " 1>&$OUTFD;
+        echo "ui_print " 1>&$OUTFD;
+    else
+        echo "${1}";
+    fi;
+}
+
+
 sumZip=0
 sumSystem=0
 
@@ -22,12 +45,12 @@ fi
 #add 1MB for buffer because of script
 totalSize=`/sbin/dc $totalSize 1000 + p`
 freeSpace=`df -k /system | awk 'END{ print $3}'`
-echo "FreeSpace(KB): $freeSpace TotalGappsSize(KB):$totalSize"
+ui_print "FreeSpace(KB): $freeSpace TotalGappsSize(KB):$totalSize"
 failed=0
 if [ "$freeSpace" -ge "$totalSize" ]; then
- echo "Space available"
+ ui_print "Space available"
 else
- echo "Space not available-Aborting"
+ ui_print "Space not available-Aborting"
  failed=1
 fi
 echo "ro.gapps.install.failed=$failed" >> /tmp/build.prop
