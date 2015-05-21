@@ -24,6 +24,5 @@ fi
 
 if (grep -qi "msm8974" /proc/cpuinfo ); then
   echo "Installing Shamu-specific google bits for OnePlus"
-  cp -a /tmp/common/* /system/
   cp -a /tmp/shamu/* /system/
 fi
