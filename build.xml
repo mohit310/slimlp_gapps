@@ -51,7 +51,7 @@
     <!-- complete build                                                        -->
     <!--=======================================================================-->
     <target name="buildAll"
-            depends="cleanupBefore,initit,generateCleanUpList,buildZero,buildMini,buildNormal,buildFull,cleanupAfter"
+            depends="cleanupBefore,initit,generateCleanUpList,buildZero,buildMini,cleanupAfter"
             description="execute complete build"/>
 
     <!--=======================================================================-->
@@ -67,31 +67,16 @@
         <!-- copy files -->
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
-                <include name="META-INF/**"/>
-                <include name="system/app/ConfigUpdater/**"/>
-                <include name="system/app/ExchangeServices/**"/>
-                <include name="system/app/GoogleCalendarSyncAdapter/**"/>
-                <include name="system/app/GoogleContactsSyncAdapter/**"/>
-                <include name="system/app/LockScreenChanger/**"/>
-                <include name="system/etc/**"/>
-                <include name="system/framework/**"/>
-                <include name="system/lib/**"/>
-                <include name="system/vendor/**"/>
-                <include name="system/priv-app/GoogleBackupTransport/**"/>
-                <include name="system/priv-app/GoogleFeedback/**"/>
-                <include name="system/priv-app/GoogleLoginService/**"/>
-                <include name="system/priv-app/GoogleOneTimeInitializer/**"/>
-                <include name="system/priv-app/GooglePartnerSetup/**"/>
-                <include name="system/priv-app/GoogleServicesFramework/**"/>
-                <include name="system/priv-app/Phonesky/**"/>
-                <include name="system/priv-app/PrebuiltGmsCore/**"/>
-                <include name="system/priv-app/SetupWizard/**"/>
-                <include name="system/priv-app/MaxxAudioFX/**"/>
-                <include name="system/app/CameraNext/**"/>
-                <include name="system/priv-app/Viper4Android/**"/>
-                <include name="system/su.d/**"/>
-                <exclude name="system/vendor/pittpatt/**"/>
+                <exclude name="system/app/ConfigUpdater/**"/>
+                <exclude name="system/app/ExchangeServices/**"/>
                 <exclude name="system/app/FaceLock/**"/>
+                <exclude name="system/priv-app/talkback/**"/>
+                <exclude name="system/priv-app/Velvet/**"/>
+                <exclude name="system/app/FaceLock/**"/>
+                <exclude name="optional/**"/>
+                <exclude name="system/tts/**"/>
+                <exclude name="system/vendor/**"/>
+                <exclude name="**/install-optional.sh"/>
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
@@ -121,40 +106,7 @@
         <delete dir="${work.dir}"/>
         <!-- copy files -->
         <copy todir="${work.dir}">
-            <fileset dir="${structure.dir}">
-                <exclude name="system/app/Books/**"/>
-                <exclude name="system/app/CalendarGoogle/**"/>
-                <exclude name="system/app/CameraGoogle/**"/>
-                <exclude name="system/app/Chrome/**"/>
-                <exclude name="system/app/CloudPrint/**"/>
-                <exclude name="system/app/Docs/**"/>
-                <exclude name="system/app/Drive/**"/>
-                <exclude name="system/app/FaceLock/**"/>
-                <exclude name="system/app/Games/**"/>
-                <exclude name="system/app/GenieWidget/**"/>
-                <exclude name="system/app/GoogleHome/**"/>
-                <exclude name="system/app/GoogleTTS/**"/>
-                <exclude name="system/app/Keep/**"/>
-                <exclude name="system/app/Keyboard/**"/>
-                <exclude name="system/app/Maps/**"/>
-                <exclude name="system/app/Messenger/**"/>
-                <exclude name="system/app/Movies/**"/>
-                <exclude name="system/app/Newsstand/**"/>
-                <exclude name="system/app/Sheets/**"/>
-                <exclude name="system/app/Slides/**"/>
-                <exclude name="system/app/Street/**"/>
-                <exclude name="system/app/Translate/**"/>
-                <exclude name="system/app/Wallet/**"/>
-                <exclude name="system/tts/**"/>
-                <exclude name="system/usr/**"/>
-                <exclude name="optional/**"/>
-                <exclude name="install-optional.sh/"/>
-                <exclude name="system/vendor/pittpatt/**"/>
-            </fileset>
-            <fileset dir="${structure.dir}">
-                <include name="tmp/**"/>
-                <include name="**/size_check.sh/"/>
-            </fileset>
+            <fileset dir="${structure.dir}"/>
         </copy>
 
         <antcall target="createUpdaterScript-zero"/>
@@ -162,71 +114,6 @@
 
         <antcall target="ZipAndSigning">
             <param name="hfile.name" value="${file.name.mini}"/>
-        </antcall>
-
-    </target>
-
-    <!--=======================================================================-->
-    <!-- normal                                                                -->
-    <!--=======================================================================-->
-    <target name="buildNormal"
-            description="execute normal gapps build">
-        <!-- preparations -->
-        <property environment="env"/>
-        <property name="file.name.normal"
-                  value="${build.dir}/Slim_normal_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}.zip"/>
-        <delete dir="${work.dir}"/>
-        <!-- copy files -->
-        <copy todir="${work.dir}">
-            <fileset dir="${structure.dir}">
-                <exclude name="system/app/Books/**"/>
-                <exclude name="system/app/Docs/**"/>
-                <exclude name="system/app/Games/**"/>
-                <exclude name="system/app/Movies/**"/>
-                <exclude name="system/app/Newsstand/**"/>
-                <exclude name="system/app/Sheets/**"/>
-                <exclude name="system/app/Slides/**"/>
-                <exclude name="system/app/CameraGoogle/**"/>
-            </fileset>
-            <fileset dir="${structure.dir}">
-                <include name="tmp/**"/>
-                <include name="**/size_check.sh/"/>
-            </fileset>
-        </copy>
-        <antcall target="createUpdaterScript"/>
-        <antcall target="copyAddonsAndGenerateBackup"/>
-
-        <antcall target="ZipAndSigning">
-            <param name="hfile.name" value="${file.name.normal}"/>
-        </antcall>
-
-    </target>
-
-    <!--=======================================================================-->
-    <!-- full                                                               -->
-    <!--=======================================================================-->
-    <target name="buildFull"
-            description="execute full gapps build">
-        <!-- preparations -->
-        <property environment="env"/>
-        <property name="file.name.full"
-                  value="${build.dir}/Slim_full_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}.zip"/>
-        <delete dir="${work.dir}"/>
-        <!-- copy files -->
-        <copy todir="${work.dir}">
-            <fileset dir="${structure.dir}">
-                <exclude name="system/app/CameraGoogle/**"/>
-            </fileset>
-            <fileset dir="${structure.dir}">
-                <include name="tmp/**"/>
-                <include name="**/size_check.sh/"/>
-            </fileset>
-        </copy>
-        <antcall target="createUpdaterScript"/>
-        <antcall target="copyAddonsAndGenerateBackup"/>
-
-        <antcall target="ZipAndSigning">
-            <param name="hfile.name" value="${file.name.full}"/>
         </antcall>
 
     </target>
