@@ -75,7 +75,7 @@
                 <exclude name="system/app/FaceLock/**"/>
                 <exclude name="optional/**"/>
                 <exclude name="system/tts/**"/>
-                <exclude name="system/vendor/**"/>
+                <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="**/install-optional.sh"/>
             </fileset>
             <fileset dir="${structure.dir}">
