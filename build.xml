@@ -154,6 +154,7 @@
         <!-- generate backup script -->
         <copy todir="${work.dir}/system/addon.d" >
             <fileset dir="${extra.dir}">
+                <exclude name="space.sh"/>
                 <include name="*.sh"/>
             </fileset>
         </copy>
