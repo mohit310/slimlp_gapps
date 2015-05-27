@@ -71,7 +71,7 @@
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
                 <exclude name="system/tts/**"/>
-                <exclude name="system/vendor/**"/>
+                <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/app/ConfigUpdater/**"/>
                 <exclude name="system/app/ExchangeServices/**"/>
                 <exclude name="system/app/FaceLock/**"/>
