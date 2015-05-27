@@ -77,7 +77,6 @@
                 <exclude name="system/priv-app/Velvet/**"/>
                 <exclude name="system/tts/**"/>
                 <exclude name="system/vendor/pittpatt/**"/>
-                <include name="**/size_check.sh/"/>
             </fileset>
         </copy>
 
