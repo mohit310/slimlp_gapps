@@ -69,14 +69,11 @@
             <fileset dir="${structure.dir}">
                 <exclude name="system/app/ConfigUpdater/**"/>
                 <exclude name="system/app/ExchangeServices/**"/>
-                <exclude name="system/app/FaceLock/**"/>
                 <exclude name="system/priv-app/talkback/**"/>
-                <exclude name="system/priv-app/Velvet/**"/>
-                <exclude name="system/app/FaceLock/**"/>
                 <exclude name="optional/**"/>
                 <exclude name="system/tts/**"/>
-                <exclude name="system/vendor/pittpatt/**"/>
-                <exclude name="**/install-optional.sh"/>
+                <exclude name="system/vesndor/pittpatt/**"/>
+                <exclude name="install-optional.sh"/>
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
