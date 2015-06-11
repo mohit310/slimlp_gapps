@@ -163,14 +163,21 @@
             <fileset dir="${work.dir}/system/su.d">
                 <include name="**/permissive.sh"/>
             </fileset>
-            <fileset dir="${work.dir}/optional/" erroronmissingdir="false">
+            <fileset dir="${work.dir}/optional/" erroronmissingdir="false"/>
+            <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false">
                 <exclude name="**/*.sh"/>
+                <exclude name="**/arm64/*"/>
+                <exclude name="**/440/*"/>
             </fileset>
         </path>
 
         <space dir="${work.dir}" exclude="META-INF,.sh,arm64,440" property="file.size.prop">
             <map from="/optional" to="/system"/>
-            <map from="/dynamic" to="/system"/>
+            <map from="/dynamic/FaceLock/arm" to="/system"/>
+            <map from="/dynamic/PrebuiltGmsCore/430" to="/system"/>
+            <map from="/dynamic/PrebuiltGmsCore/arm" to="/system"/>
+            <map from="/dynamic/Swypelib" to="/system"/>
+            <map from="/dynamic/Velvet/arm" to="/system"/>
         </space>
         <echo file="${work.dir}/apps_space.prop">${file.size.prop}</echo>
 
@@ -182,6 +189,16 @@
             <map from="${work.dir}/optional/manta/" to=""/>
             <map from="${work.dir}/optional/shamu/" to=""/>
             <map from="${work.dir}/optional/tuna/" to=""/>
+            <map from="${work.dir}/dynamic/FaceLock/arm/" to=""/>
+            <map from="${work.dir}/dynamic/FaceLock/arm64/" to=""/>
+            <map from="${work.dir}/dynamic/HotwordEnrollment/arm64/" to=""/>
+            <map from="${work.dir}/dynamic/PrebuiltGmsCore/430/" to=""/>
+            <map from="${work.dir}/dynamic/PrebuiltGmsCore/440/" to=""/>
+            <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm/" to=""/>
+            <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm64/" to=""/>
+            <map from="${work.dir}/dynamic/Swypelib/" to=""/>
+            <map from="${work.dir}/dynamic/Velvet/arm/" to=""/>
+            <map from="${work.dir}/dynamic/Velvet/arm64/" to=""/>
         </pathconvert>
         <replaceregexp match="@file.list@" replace="${file.list.backup}" flags="i" byline="true">
             <fileset dir="${work.dir}/system/addon.d">
@@ -201,6 +218,7 @@
             </fileset>
             <fileset dir="${structure.dir}/system"/>
             <fileset dir="${structure.dir}/optional/"/>
+            <fileset dir="${structure.dir}/dynamic/"/>
         </path>
         <pathconvert refid="cleanup.file" property="cleanup.list" pathsep="&quot;,&#10;&quot;" dirsep="/">
             <map from="${extra.dir}" to="/system/addon.d"/>
@@ -209,6 +227,16 @@
             <map from="${structure.dir}/optional/hammerhead/" to="/system/"/>
             <map from="${structure.dir}/optional/manta/" to="/system/"/>
             <map from="${structure.dir}/optional/shamu/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/FaceLock/arm/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/FaceLock/arm64/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/HotwordEnrollment/arm64/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/430/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/440/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm64/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/Swypelib/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/Velvet/arm/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/Velvet/arm64/" to="/system/"/>
         </pathconvert>
     </target>
 
