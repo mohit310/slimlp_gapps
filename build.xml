@@ -77,6 +77,8 @@
                 <exclude name="system/priv-app/Velvet/**"/>
                 <exclude name="system/tts/**"/>
                 <exclude name="system/vendor/pittpatt/**"/>
+                <exclude name="optional/**"/>
+                <exclude name="install-optional.sh"/>
             </fileset>
         </copy>
 
