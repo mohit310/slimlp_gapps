@@ -168,8 +168,9 @@
             </fileset>
         </path>
 
-        <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
+        <space dir="${work.dir}" exclude="META-INF,.sh,arm64,440" property="file.size.prop">
             <map from="/optional" to="/system"/>
+            <map from="/dynamic" to="/system"/>
         </space>
         <echo file="${work.dir}/apps_space.prop">${file.size.prop}</echo>
 
