@@ -165,6 +165,11 @@
             <fileset dir="${work.dir}/optional/" erroronmissingdir="false">
                 <exclude name="**/*.sh"/>
             </fileset>
+            <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false">
+                <exclude name="**/*.sh"/>
+                <exclude name="**/arm64/*"/>
+                <exclude name="**/440/*"/>
+            </fileset>
         </path>
 
         <space dir="${work.dir}" exclude="META-INF,.sh,arm64,440" property="file.size.prop">
@@ -180,6 +185,7 @@
             <map from="${work.dir}/optional/manta/" to=""/>
             <map from="${work.dir}/optional/shamu/" to=""/>
             <map from="${work.dir}/optional/tuna/" to=""/>
+            <map from="${work.dir}/dynamic/" to=""/>
         </pathconvert>
         <replaceregexp match="@file.list@" replace="${file.list.backup}" flags="i" byline="true">
             <fileset dir="${work.dir}/system/addon.d">
