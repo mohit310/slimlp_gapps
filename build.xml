@@ -70,10 +70,13 @@
                 <exclude name="system/app/ConfigUpdater/**"/>
                 <exclude name="system/app/ExchangeServices/**"/>
                 <exclude name="system/priv-app/talkback/**"/>
-                <exclude name="optional/**"/>
                 <exclude name="system/tts/**"/>
-                <exclude name="system/vesndor/pittpatt/**"/>
+                <exclude name="system/vendor/pittpatt/**"/>
+                <exclude name="optional/**"/>
                 <exclude name="install-optional.sh"/>
+                <exclude name="dynamic.sh"/>
+                <exclude name="dynamic/FaceLock/**"/>
+                <exclude name="dynamic/Velvet/**"/>
             </fileset>
             <fileset dir="${structure.dir}">
                 <include name="tmp/**"/>
@@ -83,6 +86,7 @@
 
 
         <antcall target="createUpdaterScript-zero"/>
+        <antcall target="createDynamicScript-zero"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
 
         <!-- zip and sign it -->
@@ -144,6 +148,21 @@
     </target>
 
     <!--======================================================================-->
+    <!-- Create dynamic script - removing #zero                               -->
+    <!--======================================================================-->
+    <target name="createDynamicScript-zero">
+
+        <copy file="${structure.dir}/dynamic.sh" todir="${work.dir}">
+            <filterchain>
+                <linecontains negate="true">
+                    <contains value="#zero"/>
+                </linecontains>
+            </filterchain>
+        </copy>
+    </target>
+
+
+    <!--======================================================================-->
     <!-- Copy addon and generate gapps backup from work dir file              -->
     <!--======================================================================-->
     <target name="copyAddonsAndGenerateBackup">
@@ -166,12 +185,10 @@
             <fileset dir="${work.dir}/optional/" erroronmissingdir="false"/>
             <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false">
                 <exclude name="**/*.sh"/>
-                <exclude name="**/arm64/*"/>
-                <exclude name="**/440/*"/>
             </fileset>
         </path>
 
-        <space dir="${work.dir}" exclude="META-INF,.sh,arm64,440" property="file.size.prop">
+        <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
             <map from="/optional" to="/system"/>
             <map from="/dynamic/FaceLock/arm" to="/system"/>
             <map from="/dynamic/PrebuiltGmsCore/430" to="/system"/>
@@ -190,15 +207,10 @@
             <map from="${work.dir}/optional/shamu/" to=""/>
             <map from="${work.dir}/optional/tuna/" to=""/>
             <map from="${work.dir}/dynamic/FaceLock/arm/" to=""/>
-            <map from="${work.dir}/dynamic/FaceLock/arm64/" to=""/>
-            <map from="${work.dir}/dynamic/HotwordEnrollment/arm64/" to=""/>
             <map from="${work.dir}/dynamic/PrebuiltGmsCore/430/" to=""/>
-            <map from="${work.dir}/dynamic/PrebuiltGmsCore/440/" to=""/>
             <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm/" to=""/>
-            <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm64/" to=""/>
             <map from="${work.dir}/dynamic/Swypelib/" to=""/>
             <map from="${work.dir}/dynamic/Velvet/arm/" to=""/>
-            <map from="${work.dir}/dynamic/Velvet/arm64/" to=""/>
         </pathconvert>
         <replaceregexp match="@file.list@" replace="${file.list.backup}" flags="i" byline="true">
             <fileset dir="${work.dir}/system/addon.d">
@@ -228,15 +240,10 @@
             <map from="${structure.dir}/optional/manta/" to="/system/"/>
             <map from="${structure.dir}/optional/shamu/" to="/system/"/>
             <map from="${structure.dir}/dynamic/FaceLock/arm/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/FaceLock/arm64/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/HotwordEnrollment/arm64/" to="/system/"/>
             <map from="${structure.dir}/dynamic/PrebuiltGmsCore/430/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/440/" to="/system/"/>
             <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm64/" to="/system/"/>
             <map from="${structure.dir}/dynamic/Swypelib/" to="/system/"/>
             <map from="${structure.dir}/dynamic/Velvet/arm/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/Velvet/arm64/" to="/system/"/>
         </pathconvert>
     </target>
 
