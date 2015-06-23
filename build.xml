@@ -56,7 +56,6 @@
     <!--<target name="buildAll" depends="space"/>-->
 
 
-
     <!--=======================================================================-->
     <!-- zero                                                                  -->
     <!--=======================================================================-->
@@ -70,20 +69,21 @@
         <!-- copy files -->
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
-                <exclude name="system/tts/**"/>
-                <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/app/ConfigUpdater/**"/>
                 <exclude name="system/app/ExchangeServices/**"/>
-                <exclude name="system/app/FaceLock/**"/>
                 <exclude name="system/priv-app/talkback/**"/>
-                <exclude name="system/priv-app/Velvet/**"/>
-                <exclude name="system/app/FaceLock/**"/>
+                <exclude name="system/tts/**"/>
+                <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="optional/**"/>
-                <exclude name="**/install-optional.sh"/>
+                <exclude name="install-optional.sh"/>
+                <exclude name="dynamic.sh"/>
+                <exclude name="dynamic/FaceLock/**"/>
+                <exclude name="dynamic/Velvet/**"/>
             </fileset>
         </copy>
 
         <antcall target="createUpdaterScript-zero"/>
+        <antcall target="createDynamicScript-zero"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
 
         <!-- zip and sign it -->
@@ -145,15 +145,29 @@
     </target>
 
     <!--======================================================================-->
+    <!-- Create dynamic script - removing #zero                               -->
+    <!--======================================================================-->
+    <target name="createDynamicScript-zero">
+
+        <copy file="${structure.dir}/dynamic.sh" todir="${work.dir}">
+            <filterchain>
+                <linecontains negate="true">
+                    <contains value="#zero"/>
+                </linecontains>
+            </filterchain>
+        </copy>
+    </target>
+
+    <!--======================================================================-->
     <!-- Copy addon and generate gapps backup from work dir file              -->
     <!--======================================================================-->
     <target name="copyAddonsAndGenerateBackup">
 
         <!-- generate backup script -->
-        <copy todir="${work.dir}/system/addon.d" >
+        <copy todir="${work.dir}/system/addon.d">
             <fileset dir="${extra.dir}">
-                <include name="*.sh"/>
                 <exclude name="space.sh"/>
+                <include name="*.sh"/>
             </fileset>
         </copy>
 
@@ -161,13 +175,19 @@
             <fileset dir="${work.dir}/system">
                 <exclude name="**/*.sh"/>
             </fileset>
-            <fileset dir="${work.dir}/optional/" erroronmissingdir="false">
+            <fileset dir="${work.dir}/optional/" erroronmissingdir="false"/>
+            <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false">
                 <exclude name="**/*.sh"/>
             </fileset>
         </path>
 
         <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
             <map from="/optional" to="/system"/>
+            <map from="/dynamic/FaceLock/arm" to="/system"/>
+            <map from="/dynamic/PrebuiltGmsCore/430" to="/system"/>
+            <map from="/dynamic/PrebuiltGmsCore/arm" to="/system"/>
+            <map from="/dynamic/Swypelib" to="/system"/>
+            <map from="/dynamic/Velvet/arm" to="/system"/>
         </space>
         <echo file="${work.dir}/apps_space.prop">${file.size.prop}</echo>
 
@@ -179,6 +199,11 @@
             <map from="${work.dir}/optional/manta/" to=""/>
             <map from="${work.dir}/optional/shamu/" to=""/>
             <map from="${work.dir}/optional/tuna/" to=""/>
+            <map from="${work.dir}/dynamic/FaceLock/arm/" to=""/>
+            <map from="${work.dir}/dynamic/PrebuiltGmsCore/430/" to=""/>
+            <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm/" to=""/>
+            <map from="${work.dir}/dynamic/Swypelib/" to=""/>
+            <map from="${work.dir}/dynamic/Velvet/arm/" to=""/>
         </pathconvert>
         <replaceregexp match="@file.list@" replace="${file.list.backup}" flags="i" byline="true">
             <fileset dir="${work.dir}/system/addon.d">
@@ -198,6 +223,7 @@
             </fileset>
             <fileset dir="${structure.dir}/system"/>
             <fileset dir="${structure.dir}/optional/"/>
+            <fileset dir="${structure.dir}/dynamic/"/>
         </path>
         <pathconvert refid="cleanup.file" property="cleanup.list" pathsep="&quot;,&#10;&quot;" dirsep="/">
             <map from="${extra.dir}" to="/system/addon.d"/>
@@ -206,6 +232,11 @@
             <map from="${structure.dir}/optional/hammerhead/" to="/system/"/>
             <map from="${structure.dir}/optional/manta/" to="/system/"/>
             <map from="${structure.dir}/optional/shamu/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/FaceLock/arm/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/430/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/Swypelib/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/Velvet/arm/" to="/system/"/>
         </pathconvert>
     </target>
 
