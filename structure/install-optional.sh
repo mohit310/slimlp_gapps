@@ -21,7 +21,7 @@ if [ $device = "manta" ]; then
   cp -a /tmp/manta/* /system/
 fi
 
-if [ $device = "msm8974" ]; then
+if [ $device = "MSM8974" ]; then
   echo "Installing Shamu-specific google bits for OnePlus"
   cp -a /tmp/shamu/* /system/
 fi
