@@ -138,7 +138,7 @@
     <target name="createUpdaterScript">
         <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
             <filterchain>
-                <replaceregex pattern="@package@" replace="zero" flags="i"/>
+                <replaceregex pattern="@package@" replace="mini" flags="i"/>
                 <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
             </filterchain>
         </copy>
