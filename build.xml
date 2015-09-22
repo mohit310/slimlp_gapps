@@ -184,7 +184,7 @@
         <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
             <map from="/optional" to="/system"/>
             <map from="/dynamic/FaceLock/arm" to="/system"/>
-            <map from="/dynamic/PrebuiltGmsCore/430" to="/system"/>
+            <map from="/dynamic/PrebuiltGmsCore/230" to="/system"/>
             <map from="/dynamic/PrebuiltGmsCore/arm" to="/system"/>
             <map from="/dynamic/Swypelib" to="/system"/>
             <map from="/dynamic/Velvet/arm" to="/system"/>
@@ -200,7 +200,7 @@
             <map from="${work.dir}/optional/shamu/" to=""/>
             <map from="${work.dir}/optional/tuna/" to=""/>
             <map from="${work.dir}/dynamic/FaceLock/arm/" to=""/>
-            <map from="${work.dir}/dynamic/PrebuiltGmsCore/430/" to=""/>
+            <map from="${work.dir}/dynamic/PrebuiltGmsCore/230/" to=""/>
             <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm/" to=""/>
             <map from="${work.dir}/dynamic/Swypelib/" to=""/>
             <map from="${work.dir}/dynamic/Velvet/arm/" to=""/>
@@ -233,7 +233,7 @@
             <map from="${structure.dir}/optional/manta/" to="/system/"/>
             <map from="${structure.dir}/optional/shamu/" to="/system/"/>
             <map from="${structure.dir}/dynamic/FaceLock/arm/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/430/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/230/" to="/system/"/>
             <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm/" to="/system/"/>
             <map from="${structure.dir}/dynamic/Swypelib/" to="/system/"/>
             <map from="${structure.dir}/dynamic/Velvet/arm/" to="/system/"/>
