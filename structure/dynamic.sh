@@ -1,8 +1,6 @@
 #!/sbin/sh
 
 # PrebuiltGmsCore
-# COPY 230 (ARM VERSION) TO SYSTEM
-cp -af /tmp/PrebuiltGmsCore/230/* /system
 cp -af /tmp/PrebuiltGmsCore/arm/* /system
 
 # Swypelib
