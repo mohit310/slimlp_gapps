@@ -73,12 +73,11 @@
                 <exclude name="system/app/ExchangeServices/**"/>
                 <exclude name="system/priv-app/talkback/**"/>
                 <exclude name="system/tts/**"/>
-                <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="optional/**"/>
-                <exclude name="install-optional.sh"/>
-                <exclude name="dynamic.sh"/>
                 <exclude name="dynamic/FaceLock/**"/>
                 <exclude name="dynamic/Velvet/**"/>
+                <exclude name="install-optional.sh"/>
+                <exclude name="dynamic.sh"/>
             </fileset>
         </copy>
 
@@ -107,7 +106,7 @@
             <fileset dir="${structure.dir}"/>
         </copy>
 
-        <antcall target="createUpdaterScript-zero"/>
+        <antcall target="createUpdaterScript"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
 
         <antcall target="ZipAndSigning">
@@ -184,13 +183,22 @@
         <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
             <map from="/optional" to="/system"/>
             <map from="/dynamic/FaceLock/arm" to="/system"/>
-            <map from="/dynamic/PrebuiltGmsCore/230" to="/system"/>
+            <map from="/dynamic/FaceLock/vendor" to="/system/vendor"/>
             <map from="/dynamic/PrebuiltGmsCore/arm" to="/system"/>
             <map from="/dynamic/Swypelib" to="/system"/>
             <map from="/dynamic/Velvet/arm" to="/system"/>
+            <map from="/dynamic/Velvet/usr" to="/system/usr"/>
         </space>
         <echo file="${work.dir}/apps_space.prop">${file.size.prop}</echo>
         <replace file="${work.dir}/apps_space.prop" token="\" value="/"/>
+        <!-- Escape for windows build -->
+        <replace file="${work.dir}/apps_space.prop" token="/optional" value="/system"/>
+        <replace file="${work.dir}/apps_space.prop" token="/dynamic/FaceLock/arm" value="/system"/>
+        <replace file="${work.dir}/apps_space.prop" token="/dynamic/FaceLock/vendor" value="/system/vendor"/>
+        <replace file="${work.dir}/apps_space.prop" token="/dynamic/PrebuiltGmsCore/arm" value="/system"/>
+        <replace file="${work.dir}/apps_space.prop" token="/dynamic/Swypelib" value="/system"/>
+        <replace file="${work.dir}/apps_space.prop" token="/dynamic/Velvet/arm" value="/system"/>
+        <replace file="${work.dir}/apps_space.prop" token="/dynamic/Velvet/usr" value="/system/usr"/>
 
         <pathconvert refid="item.file" property="file.list.backup" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=""/>
@@ -201,10 +209,11 @@
             <map from="${work.dir}/optional/shamu/" to=""/>
             <map from="${work.dir}/optional/tuna/" to=""/>
             <map from="${work.dir}/dynamic/FaceLock/arm/" to=""/>
-            <map from="${work.dir}/dynamic/PrebuiltGmsCore/230/" to=""/>
+            <map from="${work.dir}/dynamic/FaceLock/vendor/" to="vendor/"/>
             <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm/" to=""/>
             <map from="${work.dir}/dynamic/Swypelib/" to=""/>
             <map from="${work.dir}/dynamic/Velvet/arm/" to=""/>
+            <map from="${work.dir}/dynamic/Velvet/usr/" to="usr/"/>
         </pathconvert>
         <replaceregexp match="@file.list@" replace="${file.list.backup}" flags="i" byline="true">
             <fileset dir="${work.dir}/system/addon.d">
@@ -234,10 +243,11 @@
             <map from="${structure.dir}/optional/manta/" to="/system/"/>
             <map from="${structure.dir}/optional/shamu/" to="/system/"/>
             <map from="${structure.dir}/dynamic/FaceLock/arm/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/230/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/FaceLock/vendor/" to="/system/vendor/"/>
             <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm/" to="/system/"/>
             <map from="${structure.dir}/dynamic/Swypelib/" to="/system/"/>
             <map from="${structure.dir}/dynamic/Velvet/arm/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/Velvet/usr/" to="/system/usr/"/>
         </pathconvert>
     </target>
 
