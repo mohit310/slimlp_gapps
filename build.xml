@@ -190,6 +190,7 @@
             <map from="/dynamic/Velvet/arm" to="/system"/>
         </space>
         <echo file="${work.dir}/apps_space.prop">${file.size.prop}</echo>
+        <replace file="${work.dir}/apps_space.prop" token="\" value="/"/>
 
         <pathconvert refid="item.file" property="file.list.backup" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=""/>
