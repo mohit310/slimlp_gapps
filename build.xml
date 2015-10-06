@@ -71,10 +71,8 @@
                 <exclude name="system/app/ExchangeServices/**"/>
                 <exclude name="system/priv-app/talkback/**"/>
                 <exclude name="system/tts/**"/>
-                <exclude name="optional/**"/>
                 <exclude name="dynamic/FaceLock/**"/>
                 <exclude name="dynamic/Velvet/**"/>
-                <exclude name="install-optional.sh"/>
                 <exclude name="dynamic.sh"/>
             </fileset>
             <fileset dir="${structure.dir}">
@@ -181,14 +179,12 @@
             <fileset dir="${work.dir}/system/su.d">
                 <include name="**/permissive.sh"/>
             </fileset>
-            <fileset dir="${work.dir}/optional/" erroronmissingdir="false"/>
             <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false">
                 <exclude name="**/*.sh"/>
             </fileset>
         </path>
 
         <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
-            <map from="/optional" to="/system"/>
             <map from="/dynamic/FaceLock/arm" to="/system"/>
             <map from="/dynamic/FaceLock/vendor" to="/system/vendor"/>
             <map from="/dynamic/PrebuiltGmsCore/arm" to="/system"/>
@@ -199,7 +195,6 @@
         <echo file="${work.dir}/apps_space.prop">${file.size.prop}</echo>
         <replace file="${work.dir}/apps_space.prop" token="\" value="/"/>
         <!-- Escape for windows build -->
-        <replace file="${work.dir}/apps_space.prop" token="/optional" value="/system"/>
         <replace file="${work.dir}/apps_space.prop" token="/dynamic/FaceLock/arm" value="/system"/>
         <replace file="${work.dir}/apps_space.prop" token="/dynamic/FaceLock/vendor" value="/system/vendor"/>
         <replace file="${work.dir}/apps_space.prop" token="/dynamic/PrebuiltGmsCore/arm" value="/system"/>
@@ -210,12 +205,6 @@
 
         <pathconvert refid="item.file" property="file.list.backup" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=""/>
-            <map from="${work.dir}/optional/common/" to=""/>
-            <map from="${work.dir}/optional/face/" to=""/>
-            <map from="${work.dir}/optional/hammerhead/" to=""/>
-            <map from="${work.dir}/optional/manta/" to=""/>
-            <map from="${work.dir}/optional/shamu/" to=""/>
-            <map from="${work.dir}/optional/tuna/" to=""/>
             <map from="${work.dir}/dynamic/FaceLock/arm/" to=""/>
             <map from="${work.dir}/dynamic/FaceLock/vendor/" to="vendor/"/>
             <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm/" to=""/>
@@ -241,16 +230,11 @@
                 <include name="*.sh"/>
             </fileset>
             <fileset dir="${structure.dir}/system"/>
-            <fileset dir="${structure.dir}/optional/"/>
             <fileset dir="${structure.dir}/dynamic/"/>
         </path>
         <pathconvert refid="cleanup.file" property="cleanup.list" pathsep="&quot;,&#10;&quot;" dirsep="/">
             <map from="${extra.dir}" to="/system/addon.d"/>
             <map from="${structure.dir}/system/" to="/system/"/>
-            <map from="${structure.dir}/optional/common/" to="/system/"/>
-            <map from="${structure.dir}/optional/hammerhead/" to="/system/"/>
-            <map from="${structure.dir}/optional/manta/" to="/system/"/>
-            <map from="${structure.dir}/optional/shamu/" to="/system/"/>
             <map from="${structure.dir}/dynamic/FaceLock/arm/" to="/system/"/>
             <map from="${structure.dir}/dynamic/FaceLock/vendor/" to="/system/vendor/"/>
             <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm/" to="/system/"/>
