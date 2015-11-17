@@ -269,13 +269,4 @@
         <delete file="${build.dir}/gapps.filenames"/>
     </target>
 
-    <!--=======================================================================-->
-    <!-- initiating build                                                      -->
-    <!--=======================================================================-->
-    <target name="initit"
-            description="initiating-steps">
-        <mkdir dir="${build.dir}"/>
-        <mkdir dir="${work.dir}"/>
-    </target>
-
 </project>
