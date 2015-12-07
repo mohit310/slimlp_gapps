@@ -8,8 +8,6 @@
 list_files() {
 cat << EOF
 app/CameraNext/CameraNextMod.apk
-etc/media_profiles.xml
-lib/libjni_mosaic.so
 EOF
 }
 
