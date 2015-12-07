@@ -13,10 +13,17 @@
 <!--                                                                         -->
 <!--  AUTHORS:                                                               -->
 <!--                                                                         -->
+<!--    tortureduck: Manfred Hofbauer                                        -->
+<!--    dankoman   : Daniel Koman                                            -->
+<!--    victorlapin: Victor Lapin                                            -->
+<!--    raulx222   : Raul Petru                                              -->
+<!--    uzen       : Dmitry Popov                                            -->
+<!--    mohit310   : Mohit Keswani                                           -->
+<!--                                                                         -->
 <!--=========================================================================-->
 <project name="buildGapps"
-         default="buildAll"
-         basedir=".">
+        default="buildAll"
+        basedir=".">
     <property file="build.properties"/>
     <description>
         This file list is used by ant to build the Slim Gapps project
@@ -25,33 +32,25 @@
     <!--=======================================================================-->
     <!-- some variables                                                        -->
     <!--=======================================================================-->
-    <property name="app.name" value="buildGapps"/>
-    <property name="app.dir" value="${basedir}"/>
-    <property name="work.dir" value="${app.dir}/work"/>
-    <property name="build.dir" value="${app.dir}/build"/>
-    <property name="structure.dir" value="${app.dir}/structure"/>
-    <property name="extra.dir" value="${app.dir}/extras"/>
-    <property name="sign.jar" value="${app.dir}/tools/signapk.jar"/>
-    <property name="sign.pem" value="${app.dir}/tools/testkey.x509.pem"/>
-    <property name="sign.pk8" value="${app.dir}/tools/testkey.pk8"/>
-
-    <tstamp>
+    <property name="app.name"                     value="buildGapps"/>
+    <property name="app.dir"                      value="${basedir}"/>
+    <property name="work.dir"                     value="${app.dir}/work"/>
+    <property name="build.dir"                    value="${app.dir}/build"/>
+    <property name="structure.dir"                value="${app.dir}/structure"/>
+    <property name="tools.dir"                    value="${app.dir}/tools"/>
+    <property name="sign.jar"                     value="${app.dir}/tools/signapk.jar"/>
+    <property name="sign.pem"                     value="${app.dir}/tools/testkey.x509.pem"/>
+    <property name="sign.pk8"                     value="${app.dir}/tools/testkey.pk8"/>
+    <property name="extra.dir"                    value="${app.dir}/extras"/>
+    <tstamp>  
         <format property="build.today" pattern="yyyyMMdd"/>
-    </tstamp>
-
-    <!--=======================================================================-->
-    <!-- Space task definition                                                 -->
-    <!--=======================================================================-->
-    <path id="lib.path">
-        <fileset dir="lib" includes="**/*.jar"/>
-    </path>
-    <taskdef name="space" classname="com.mk.SpaceTask" classpathref="lib.path"/>
+    </tstamp>  
 
     <!--=======================================================================-->
     <!-- complete build                                                        -->
     <!--=======================================================================-->
     <target name="buildAll"
-            depends="cleanupBefore,generateCleanUpList,buildZero,buildMini,cleanupAfter"
+            depends="cleanupBefore,initit,generateCleanUpList,buildZero,buildMini,cleanupAfter"
             description="execute complete build"/>
 
     <!--=======================================================================-->
@@ -59,37 +58,89 @@
     <!--=======================================================================-->
     <target name="buildZero"
             description="execute zero gapps build">
+
         <!-- preparations -->
         <property environment="env"/>
-        <property name="file.name.zero"
-                  value="${build.dir}/Slim_zero_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}.zip"/>
+        <property name="file.name.zero" value="${build.dir}/Slim_zero_gapps.${PRODUCT_VERSION_RELEASE_TYPE}.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}.zip"/>
         <delete dir="${work.dir}"/>
+        <propertyfile file="${build.dir}/gapps.filenames">
+            <entry key="zerofilename" value="${file.name.zero}"/>
+        </propertyfile>
+
         <!-- copy files -->
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
                 <exclude name="system/app/ConfigUpdater/**"/>
                 <exclude name="system/app/ExchangeServices/**"/>
-                <exclude name="system/priv-app/talkback/**"/>
                 <exclude name="system/tts/**"/>
+                <exclude name="system/usr/**"/>
+                <exclude name="system/vendor/**"/>
                 <exclude name="dynamic/FaceLock/**"/>
                 <exclude name="dynamic/Velvet/**"/>
                 <exclude name="dynamic.sh"/>
             </fileset>
-            <fileset dir="${structure.dir}">
-                <include name="tmp/**"/>
-                <include name="**/size_check.sh/"/>
-            </fileset>
+        </copy>
+        <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
+            <filterchain>
+                <replaceregex pattern="@package@" replace="zero" flags="i"/>
+                <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
+            </filterchain>
+        </copy>
+        <copy file="${app.dir}/structure/dynamic.sh" todir="${work.dir}">
+            <filterchain>
+                <linecontains negate="true">
+                    <contains value="#mini"/>
+                </linecontains>
+            </filterchain>
         </copy>
 
+        <!-- repackage libs and zipalign -->
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/dynamic/PrebuiltGmsCore/arm/priv-app/PrebuiltGmsCore"/>
+        </antcall>
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/dynamic/PrebuiltGmsCore/arm64/priv-app/PrebuiltGmsCore"/>
+        </antcall>
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/system/app/GoogleTTS"/>
+        </antcall>
 
-        <antcall target="createUpdaterScript-zero"/>
-        <antcall target="createDynamicScript-zero"/>
-        <antcall target="copyAddonsAndGenerateBackup"/>
+        <!-- generate backup script --> 
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
+        <pathconvert refid="item.file" property="file.list.zero" pathsep="&#10;" dirsep="/">
+            <map from="${work.dir}/system/" to=''/>
+        </pathconvert>
+        <copy file="${app.dir}/extras/80-gapps.sh" todir="${work.dir}/system/addon.d">
+            <filterchain>
+                <replaceregex pattern="@file.list@" replace="${file.list.zero}" flags="i"/>
+            </filterchain>
+        </copy>
 
-        <!-- zip and sign it -->
+        <!-- fill in g.prop values -->
+        <length property="length.zero" mode="all">
+            <fileset dir="${work.dir}"/>
+        </length>
+        <propertyfile file="${work.dir}/system/etc/g.prop">
+            <entry key="ro.addon.type" value="gapps"/>
+            <entry key="ro.addon.platform" value="lp"/>
+            <entry key="ro.addon.version" value="slim.zero.${build.today}"/>
+            <entry key="ro.addon.minimumversion" value="${PRODUCT_VERSION_MAJOR}"/>
+            <entry key="ro.addon.size" value="${length.zero}"/>
+        </propertyfile>
+
+        <!-- copy space.sh and fill in values -->
+        <copy file="${app.dir}/extras/space.sh" todir="${work.dir}">
+            <filterchain>
+                <replaceregex pattern="@version@" replace="${PRODUCT_VERSION_MAJOR}" flags="i"/>
+                <replaceregex pattern="@space_needed@" replace="${length.zero}" flags="i"/>
+            </filterchain>
+        </copy>
+
+        <!-- zip and sign it --> 
         <antcall target="ZipAndSigning">
             <param name="hfile.name" value="${file.name.zero}"/>
         </antcall>
+
     </target>
 
     <!--=======================================================================-->
@@ -97,132 +148,83 @@
     <!--=======================================================================-->
     <target name="buildMini"
             description="execute mini gapps build">
+
         <!-- preparations -->
         <property environment="env"/>
-        <property name="file.name.mini"
-                  value="${build.dir}/Slim_mini_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}.zip"/>
+        <property name="file.name.mini" value="${build.dir}/Slim_mini_gapps.${PRODUCT_VERSION_RELEASE_TYPE}.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}.zip"/>
         <delete dir="${work.dir}"/>
+        <propertyfile file="${build.dir}/gapps.filenames">
+            <entry key="minifilename" value="${file.name.mini}"/>
+        </propertyfile>
+
         <!-- copy files -->
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}"/>
         </copy>
-
-        <antcall target="createUpdaterScript"/>
-        <antcall target="copyAddonsAndGenerateBackup"/>
-
-        <antcall target="ZipAndSigning">
-            <param name="hfile.name" value="${file.name.mini}"/>
-        </antcall>
-
-    </target>
-
-    <!--======================================================================-->
-    <!-- Create updater script - removing #zero                               -->
-    <!--======================================================================-->
-    <target name="createUpdaterScript-zero">
-        <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
-            <filterchain>
-                <replaceregex pattern="@package@" replace="zero" flags="i"/>
-                <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
-                <linecontains negate="true">
-                    <contains value="#zero"/>
-                </linecontains>
-            </filterchain>
-        </copy>
-    </target>
-
-
-    <!--======================================================================-->
-    <!-- Create updater script - with #zero                                   -->
-    <!--======================================================================-->
-    <target name="createUpdaterScript">
         <copy file="${app.dir}/extras/updater-script" todir="${work.dir}/META-INF/com/google/android">
             <filterchain>
                 <replaceregex pattern="@package@" replace="mini" flags="i"/>
                 <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
             </filterchain>
         </copy>
-    </target>
 
-    <!--======================================================================-->
-    <!-- Create dynamic script - removing #zero                               -->
-    <!--======================================================================-->
-    <target name="createDynamicScript-zero">
+        <!-- repackage libs and zipalign -->
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/dynamic/PrebuiltGmsCore/arm/priv-app/PrebuiltGmsCore"/>
+        </antcall>
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/dynamic/PrebuiltGmsCore/arm64/priv-app/PrebuiltGmsCore"/>
+        </antcall>
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/dynamic/Velvet/arm/priv-app/Velvet"/>
+        </antcall>
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/dynamic/Velvet/arm64/priv-app/Velvet"/>
+        </antcall>
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/system/app/GoogleTTS"/>
+        </antcall>
 
-        <copy file="${structure.dir}/dynamic.sh" todir="${work.dir}">
+        <!-- generate backup script --> 
+        <fileset id="item.file" dir="${work.dir}/system" includes="**/*"/>
+        <pathconvert refid="item.file" property="file.list.mini" pathsep="&#10;" dirsep="/">
+            <map from="${work.dir}/system/" to=''/>
+        </pathconvert>
+        <copy file="${app.dir}/extras/80-gapps.sh" todir="${work.dir}/system/addon.d">
             <filterchain>
-                <linecontains negate="true">
-                    <contains value="#zero"/>
-                </linecontains>
+                <replaceregex pattern="@file.list@" replace="${file.list.mini}" flags="i"/>
             </filterchain>
         </copy>
-    </target>
 
+        <!-- fill in g.prop values -->
+        <length property="length.mini" mode="all">
+            <fileset dir="${work.dir}"/>
+        </length>
+        <propertyfile file="${work.dir}/system/etc/g.prop">
+            <entry key="ro.addon.type" value="gapps"/>
+            <entry key="ro.addon.platform" value="lp"/>
+            <entry key="ro.addon.version" value="slim.mini.${build.today}"/>
+            <entry key="ro.addon.minimumversion" value="${PRODUCT_VERSION_MAJOR}"/>
+            <entry key="ro.addon.size" value="${length.mini}"/>
+        </propertyfile>
 
-    <!--======================================================================-->
-    <!-- Copy addon and generate gapps backup from work dir file              -->
-    <!--======================================================================-->
-    <target name="copyAddonsAndGenerateBackup">
-
-        <!-- generate backup script -->
-        <copy todir="${work.dir}/system/addon.d" >
-            <fileset dir="${extra.dir}">
-                <exclude name="space.sh"/>
-                <include name="*.sh"/>
-            </fileset>
+        <!-- copy space.sh and fill in values -->
+        <copy file="${app.dir}/extras/space.sh" todir="${work.dir}">
+            <filterchain>
+                <replaceregex pattern="@version@" replace="${PRODUCT_VERSION_MAJOR}" flags="i"/>
+                <replaceregex pattern="@space_needed@" replace="${length.mini}" flags="i"/>
+            </filterchain>
         </copy>
 
-        <path id="item.file">
-            <fileset dir="${work.dir}/system">
-                <exclude name="**/*.sh"/>
-            </fileset>
-            <fileset dir="${work.dir}/system/su.d">
-                <include name="**/permissive.sh"/>
-            </fileset>
-            <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false">
-                <exclude name="**/*.sh"/>
-            </fileset>
-        </path>
+        <!-- zip and sign it -->
+        <antcall target="ZipAndSigning">
+            <param name="hfile.name" value="${file.name.mini}"/>
+        </antcall>
 
-        <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
-            <map from="/dynamic/FaceLock/arm" to="/system"/>
-            <map from="/dynamic/FaceLock/vendor" to="/system/vendor"/>
-            <map from="/dynamic/PrebuiltGmsCore/arm" to="/system"/>
-            <map from="/dynamic/Swypelib" to="/system"/>
-            <map from="/dynamic/Velvet/arm" to="/system"/>
-            <map from="/dynamic/Velvet/usr" to="/system/usr"/>
-        </space>
-        <echo file="${work.dir}/apps_space.prop">${file.size.prop}</echo>
-        <replace file="${work.dir}/apps_space.prop" token="\" value="/"/>
-        <!-- Escape for windows build -->
-        <replace file="${work.dir}/apps_space.prop" token="/dynamic/FaceLock/arm" value="/system"/>
-        <replace file="${work.dir}/apps_space.prop" token="/dynamic/FaceLock/vendor" value="/system/vendor"/>
-        <replace file="${work.dir}/apps_space.prop" token="/dynamic/PrebuiltGmsCore/arm" value="/system"/>
-        <replace file="${work.dir}/apps_space.prop" token="/dynamic/Swypelib" value="/system"/>
-        <replace file="${work.dir}/apps_space.prop" token="/dynamic/Velvet/arm" value="/system"/>
-        <replace file="${work.dir}/apps_space.prop" token="/dynamic/Velvet/usr" value="/system/usr"/>
-
-
-        <pathconvert refid="item.file" property="file.list.backup" pathsep="&#10;" dirsep="/">
-            <map from="${work.dir}/system/" to=""/>
-            <map from="${work.dir}/dynamic/FaceLock/arm/" to=""/>
-            <map from="${work.dir}/dynamic/FaceLock/vendor/" to="vendor/"/>
-            <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm/" to=""/>
-            <map from="${work.dir}/dynamic/Swypelib/" to=""/>
-            <map from="${work.dir}/dynamic/Velvet/arm/" to=""/>
-            <map from="${work.dir}/dynamic/Velvet/usr/" to="usr/"/>
-
-        </pathconvert>
-        <replaceregexp match="@file.list@" replace="${file.list.backup}" flags="i" byline="true">
-            <fileset dir="${work.dir}/system/addon.d">
-                <include name="**/*-gapps.sh"/>
-            </fileset>
-        </replaceregexp>
     </target>
-
-
+  
     <!--=======================================================================-->
-    <!-- generate clean up list                                                     -->
+    <!-- generate clean up list                                                -->
     <!--=======================================================================-->
     <target name="generateCleanUpList">
         <path id="cleanup.file">
@@ -230,18 +232,22 @@
                 <include name="*.sh"/>
             </fileset>
             <fileset dir="${structure.dir}/system"/>
-            <fileset dir="${structure.dir}/dynamic/"/>
         </path>
         <pathconvert refid="cleanup.file" property="cleanup.list" pathsep="&quot;,&#10;&quot;" dirsep="/">
             <map from="${extra.dir}" to="/system/addon.d"/>
             <map from="${structure.dir}/system/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/FaceLock/arm/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/FaceLock/vendor/" to="/system/vendor/"/>
-            <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/Swypelib/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/Velvet/arm/" to="/system/"/>
-            <map from="${structure.dir}/dynamic/Velvet/usr/" to="/system/usr/"/>
         </pathconvert>
+    </target>
+
+    <!--=======================================================================-->
+    <!-- repackage libs and zipalign                                           -->
+    <!--=======================================================================-->
+    <target name="fixLibs">
+        <echo message="Decompressing and repackaging libs, zipaligning"/>
+        <exec executable="/bin/bash" dir="${tools.dir}" failonerror="true" >
+            <arg value="libWork.sh"/>
+            <arg value="${apk.dir}"/>
+        </exec>
     </target>
 
     <!--=======================================================================-->
@@ -276,6 +282,25 @@
         <echo message="Cleaning up"/>
         <delete file="${build.dir}/unsigned.zip"/>
         <delete file="${build.dir}/gapps.filenames"/>
+    </target>
+
+    <!--=======================================================================-->
+    <!-- initiating build                                                      -->
+    <!--=======================================================================-->
+    <target name ="initit"
+            description="initiating-steps">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${work.dir}"/>
+    </target>
+
+    <!--=======================================================================-->
+    <!-- test build                                                            -->
+    <!--=======================================================================-->
+    <target name ="testit"
+            description="testtest">
+        <echo message="${x.dir}"/>
+        <property name="x.dir" value="test9899"/>
+        <echo message="${x.dir}"/>
     </target>
 
 </project>

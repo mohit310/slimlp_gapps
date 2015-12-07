@@ -1,75 +1,172 @@
-ui_print("******************************************************");
-ui_print("SlimLP By MOHIT310 @package@ GApps for Android 5.1");
-ui_print("******************************************************");
+ui_print("***********************************************");
+ui_print("        Slim @package@ GApps for Android 6.0");
+ui_print("***********************************************");
+show_progress("1", 0);
 
+ui_print("mounting system...");
+ifelse(is_mounted("/system"), unmount("/system"));
 run_program("/sbin/busybox", "mount", "/system");
-ui_print("Checking if /system has space for GApps");
-package_extract_file("size_check.sh", "/tmp/size_check.sh");
-ui_print("Extracted size_check.sh");
-package_extract_file("apps_space.prop", "/tmp/apps_space.prop");
-ui_print("Extracted apps_space_prop");
-set_perm(0, 0, 0777, "/tmp/size_check.sh");
-set_perm(0, 0, 0755, "/tmp/apps_space.prop");
-ui_print("Running size check now");
-run_program("/tmp/size_check.sh", "");
-ifelse(
-    file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "0",
-    (
-        ui_print("Removing old GApps...");
-        delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/MaxxAudioFX");
-        delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/MaxxAudioFX");
-        delete_recursive("/system/priv-app/GmsCore");
-        delete(
-        "/system/addon.d/91-v4a.sh",
-        "/system/su.d/permissive.sh",
-        "/system/lib/soundfx/libv4a_fx_ics.so",
-        "@cleanup.list@"
-        );
 
-        ui_print("Installing files...");
-        show_progress(1, 15);
-        package_extract_dir("system", "/system");
-        set_perm(0, 0, 0755, "/system/addon.d/80-gapps.sh");
-        show_progress(1, 15);
-        package_extract_dir("dynamic", "/tmp");
-        package_extract_file("dynamic.sh", "/tmp/dynamic.sh");
-        set_perm(0, 0, 0777, "/tmp/dynamic.sh");
-        run_program("/tmp/dynamic.sh", "");
-        show_progress(1, 15);
-        ui_print("Cleaning up and setting metadata...");
-        set_metadata_recursive("/system/addon.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/priv-app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/etc/permissions", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/etc/preferred-apps", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/su.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/framework", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/lib", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/usr/srec/en-US", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/vendor/pittpatt", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/tts", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/vendor/etc", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata_recursive("/system/vendor/soundfx", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata("/system/etc/media_profiles.xml", "uid", 0, "gid", 0, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata("/system/etc/audio_effects.conf", "uid", 0, "gid", 0, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        set_metadata("/system/etc/audio_policy.conf", "uid", 0, "gid", 0, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-        run_program("/sbin/busybox", "umount", "/system");
-        ui_print("Installation complete!");
-    )
+ui_print("1. extracting scripts...");
+set_progress("0.1");
+package_extract_file("space.sh", "/tmp/space.sh");
+package_extract_file("dynamic.sh", "/tmp/dynamic.sh");
+package_extract_file("permissions.sh", "/tmp/permissions.sh");
+set_perm(0, 0, 0777, "/tmp/space.sh");
+set_perm(0, 0, 0777, "/tmp/dynamic.sh");
+set_perm(0, 0, 0777, "/tmp/permissions.sh");
+
+ui_print("2. performing space calculations...");
+set_progress("0.2");
+run_program("/tmp/space.sh");
+
+ifelse(
+    file_getprop("/tmp/build.prop", "ro.gapps.install.status") == "10",
+        (
+            ui_print("  WARNING - GAPPS ARE BEING FORCIBLY INSTALLED");
+            ui_print("  DUE TO CERTAIN MET CRITERIA IN YOUR BUILD.PROP!");
+            ui_print("  gapps installation will now proceed...");
+
+            ui_print("3. removing old files...");
+            set_progress("0.3");
+            delete_recursive("/system/app/Provision","/system/app/QuickSearchBox","/system/priv-app/Provision","/system/priv-app/QuickSearchBox");
+            
+            ui_print("4. installing new files...");
+            set_progress("0.4");
+            package_extract_dir("system", "/system");
+            set_perm(0, 0, 0755, "/system/addon.d/80-gapps.sh");
+
+            ui_print("5. running dynamic installation...");
+            set_progress("0.5");
+            package_extract_dir("dynamic", "/tmp");
+            run_program("/tmp/dynamic.sh", "");
+
+            ui_print("6. fixing permissions...");
+            set_progress("0.6");
+            set_metadata("/system/etc/g.prop", "uid", 0, "gid", 0, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+            run_program("/tmp/permissions.sh", "");
+            ui_print("installation complete!");
+        )
 );
 
 ifelse(
-    file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "1",
-    (
-        ui_print("* not enough free space on system *");
-        ui_print("plz try a smaller package.");
-        ui_print("******* gapps Installation failed *******");
-        ui_print("no changes were made to your device");
-        ui_print(" ");
-        ui_print("now exiting...");
-        run_program("/sbin/busybox", "umount", "/system");
-    )
+    file_getprop("/tmp/build.prop", "ro.gapps.install.status") == "0",
+        (
+            ui_print("  FREE SPACE CHECK PASSED!");
+            ui_print("  gapps installation will now proceed...");
+
+            ui_print("3. removing old files...");
+            set_progress("0.3");
+            delete_recursive("/system/app/Provision","/system/app/QuickSearchBox","/system/priv-app/Provision","/system/priv-app/QuickSearchBox");
+            delete(
+            "@cleanup.list@"
+            );
+
+            ui_print("4. installing new files...");
+            set_progress("0.4");
+            package_extract_dir("system", "/system");
+            set_perm(0, 0, 0755, "/system/addon.d/80-gapps.sh");
+
+            ui_print("5. running dynamic installation...");
+            set_progress("0.5");
+            package_extract_dir("dynamic", "/tmp");
+            run_program("/tmp/dynamic.sh", "");
+
+            ui_print("6. fixing permissions...");
+            set_progress("0.6");
+            set_metadata("/system/etc/g.prop", "uid", 0, "gid", 0, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+            run_program("/tmp/permissions.sh", "");
+            ui_print("installation complete!");
+        )
 );
 
-delete("/tmp/size_check.sh","/tmp/apps_space.prop","/tmp/build.prop");
-ui_print("---------------------DONE--------------------------");
+ifelse(
+    file_getprop("/tmp/build.prop", "ro.gapps.install.status") == "1",
+        (
+            ui_print("* NOT ENOUGH FREE SPACE ON SYSTEM *");
+            ui_print("please try a smaller package or resize");
+            ui_print("your system partition to make room for gapps.");
+
+            set_progress("0.6");
+
+            ui_print("******* GAPPS INSTALLATION FAILED *******");
+            ui_print("no changes were made to your device");
+            ui_print(" ");
+            ui_print("now exiting...");
+
+            ui_print("NEED HELP?");
+            ui_print("1. in TWRP: Advanced > Copy log to SD");
+            ui_print("2. submit recovery.log from your root storage");
+            ui_print("       to slim gapps thread on xda");
+        )
+);
+
+ifelse(
+    file_getprop("/tmp/build.prop", "ro.gapps.install.status") == "2",
+        (
+            ui_print("* NON-SLIM GAPPS DETECTED *");
+            ui_print("have you been cheating on me? at least destroy");
+            ui_print("the evidence. wipe your system partition in");
+            ui_print("recovery, re-flash rom, and then flash gapps again.");
+
+            set_progress("0.6");
+
+            ui_print("******* GAPPS INSTALLATION FAILED *******");
+            ui_print("no changes were made to your device");
+            ui_print(" ");
+            ui_print("now exiting...");
+
+            ui_print("NEED HELP?");
+            ui_print("1. in TWRP: Advanced > Copy log to SD");
+            ui_print("2. submit recovery.log from your root storage");
+            ui_print("       to slim gapps thread on xda");
+        )
+);
+
+ifelse(
+    file_getprop("/tmp/build.prop", "ro.gapps.install.status") == "3",
+        (
+            ui_print("* NO ROM INSTALLED *");
+            ui_print("no rom installed. please flash rom before gapps.");
+            ui_print(".......you should be slapped.");
+
+            set_progress("0.6");
+
+            ui_print("******* GAPPS INSTALLATION FAILED *******");
+            ui_print("no changes were made to your device");
+            ui_print(" ");
+            ui_print("now exiting...");
+
+            ui_print("NEED HELP?");
+            ui_print("1. in TWRP: Advanced > Copy log to SD");
+            ui_print("2. submit recovery.log from your root storage");
+            ui_print("       to slim gapps thread on xda");
+        )
+);
+
+ifelse(
+    file_getprop("/tmp/build.prop", "ro.gapps.install.status") == "4",
+        (
+            ui_print("* ROM-GAPPS ANDROID VERSION MISMATCH *");
+            ui_print("this gapps package is not intended");
+            ui_print("for the installed version of android.");
+
+            set_progress("0.6");
+
+            ui_print("******* GAPPS INSTALLATION FAILED *******");
+            ui_print("no changes were made to your device");
+            ui_print(" ");
+            ui_print("now exiting...");
+
+            ui_print("NEED HELP?");
+            ui_print("1. in TWRP: Advanced > Copy log to SD");
+            ui_print("2. submit recovery.log from your root storage");
+            ui_print("       to slim gapps thread on xda");
+        )
+);
+
+ui_print("unmounting system...");
+set_progress("0.9");
+
+run_program("/sbin/busybox", "umount", "/system");
+set_progress("1");
