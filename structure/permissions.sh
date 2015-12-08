@@ -40,6 +40,6 @@ set_perm_recursive 0 0 755 644 "/system/app" "/system/etc/permissions" "/system/
 find "/system/vendor/pittpatt" -type d -exec chown 0.2000 '{}' \; -exec chown 0:2000 '{}' \;
 
 # Set selinux contexts
-ch_con_recursive "/system/addon.d" "/system/app" "/system/etc/permissions" "/system/etc/preferred-apps" "/system/etc/sysconfig" "/system/framework" "/system/lib" "/system/lib64" "/system/priv-app" "/system/usr/srec" "/system/vendor/pittpatt";
+ch_con_recursive "/system/addon.d" "/system/app" "/system/etc/permissions" "/system/etc/preferred-apps" "/system/etc/sysconfig" "/system/etc/waves" "/system/framework" "/system/lib" "/system/lib64" "/system/priv-app" "/system/usr/srec" "/system/vendor/pittpatt" "/system/vendor/lib" "/system/vendor/etc";
 
 exit 0
