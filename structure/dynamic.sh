@@ -9,10 +9,10 @@ cp -rf /tmp/SetupWizard/phone/* /system
 # LatinIME swypelib
 cp -rf /tmp/LatinIME_swypelib/lib/* /system/lib
 
-# FaceLock #mini
+# FaceLock #zero
 cp -rf /tmp/FaceLock/arm/* /system #zero
 
-# Velvet #mini
+# Velvet #zero
 cp -rf /tmp/Velvet/arm/* /system #zero
 
 exit 0

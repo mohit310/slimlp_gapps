@@ -1,5 +1,5 @@
 ui_print("************************************************");
-ui_print("SlimLP By MOHIT310 @package@ GApps for Android 6.0");
+ui_print("SlimMM By MOHIT310 @package@ GApps for Android 6.0");
 ui_print("************************************************");
 show_progress("1", 0);
 
@@ -29,7 +29,6 @@ ifelse(
         delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android");
         delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android");
         delete(
-
         "@cleanup.list@"
         );
 
@@ -37,12 +36,14 @@ ifelse(
         set_progress("0.4");
         package_extract_dir("system", "/system");
         set_perm(0, 0, 0755, "/system/addon.d/80-gapps.sh");
-        run_program("/tmp/dynamic.sh", "");
         set_progress("0.5");
+        package_extract_dir("dynamic", "/tmp");
+        run_program("/tmp/dynamic.sh", "");
+        set_progress("0.6");
         ui_print("Installation complete!");
         ui_print("Setting permissions!");
         run_program("/tmp/permissions.sh", "");
-        set_progress("0.8");
+        set_progress("0.7");
         ui_print("Setting permissions done!");
     )
 );
