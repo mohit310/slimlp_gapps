@@ -23,16 +23,14 @@ run_program("/tmp/space.sh");
 ifelse(
     file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "0",
     (
-        ui_print("Removing old GApps...");
+        ui_print("3. Removing old GApps...");
         set_progress("0.3");
-        delete_recursive("/system/app/Provision","/system/app/QuickSearchBox","/system/priv-app/Provision","/system/priv-app/QuickSearchBox");
         delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android");
         delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android");
         delete(
         "@cleanup.list@"
         );
-
-        ui_print("Installing files...");
+        ui_print("4. Installing files...");
         set_progress("0.4");
         package_extract_dir("system", "/system");
         set_perm(0, 0, 0755, "/system/addon.d/80-gapps.sh");
@@ -41,7 +39,7 @@ ifelse(
         run_program("/tmp/dynamic.sh", "");
         set_progress("0.6");
         ui_print("Installation complete!");
-        ui_print("Setting permissions!");
+        ui_print("5. Setting permissions!");
         run_program("/tmp/permissions.sh", "");
         set_progress("0.7");
         ui_print("Setting permissions done!");
@@ -52,7 +50,6 @@ ifelse(
     file_getprop("/tmp/build.prop", "ro.gapps.install.failed") == "1",
     (
         ui_print("* not enough free space on system *");
-        ui_print("plz try a smaller package.");
         ui_print("******* gapps Installation failed *******");
         ui_print("no changes were made to your device");
         ui_print(" ");
@@ -61,9 +58,9 @@ ifelse(
 );
 
 delete("/tmp/space.sh","/tmp/apps_space.prop","/tmp/dynamic.sh","/tmp/permissions.sh","/tmp/build.prop");
-ui_print("unmounting system...");
+ui_print("6. unmounting system...");
 set_progress("0.9");
 
 run_program("/sbin/busybox", "umount", "/system");
 set_progress("1");
-ui_print("---------------------DONE--------------------------");
+ui_print("7. ---DONE--");
