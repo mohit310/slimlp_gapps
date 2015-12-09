@@ -271,6 +271,13 @@
 
     <target name="unzipandpack">
         <unzip src="${apk.dir}/${apk.file}" overwrite="true" dest="${apk.dir}/tmp"/>
+        <copy todir="${apk.dir}/tmp/new-lib" flatten="true">
+            <fileset dir="${apk.dir}/tmp/lib/">
+                <include name="**/*.so"/>
+            </fileset>
+        </copy>
+        <delete dir="${apk.dir}/tmp/lib"/>
+        <move file="${apk.dir}/tmp/new-lib" tofile="${apk.dir}/tmp/lib"/>
         <zip basedir="${apk.dir}/tmp" destfile="${apk.dir}/tmp/new.zip" casesensitive="true"/>
         <exec executable="${tools.dir}/bin/${zipalign_executable}">
             <arg value="-f"/>
