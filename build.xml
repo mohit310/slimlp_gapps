@@ -269,28 +269,23 @@
         </antcall>
     </target>
 
+    <!--=======================================================================-->
+    <!-- zipAlign                                                              -->
+    <!--=======================================================================-->
     <target name="unzipandpack">
         <unzip src="${apk.dir}/${apk.file}" overwrite="true" dest="${apk.dir}/tmp"/>
-        <copy todir="${apk.dir}/tmp/new-lib" flatten="true">
-            <fileset dir="${apk.dir}/tmp/lib/">
-                <include name="**/*.so"/>
-            </fileset>
-        </copy>
-        <delete dir="${apk.dir}/tmp/lib"/>
-        <move file="${apk.dir}/tmp/new-lib" tofile="${apk.dir}/new-lib"/>
-        <zip basedir="${apk.dir}/tmp" destfile="${apk.dir}/new.zip" casesensitive="true"/>
-        <delete dir="${apk.dir}/tmp" quiet="true"/>
-        <move file="${apk.dir}/new-lib" tofile="${apk.dir}/tmp/lib"/>
-        <zip basedir="${apk.dir}/tmp" destfile="${apk.dir}/new.zip" casesensitive="true" update="true" includes="**/*.so" level="0"/>
+        <delete dir="${apk.dir}/lib"/>
+        <move file="${apk.dir}/tmp/lib" todir="${apk.dir}" overwrite="true" force="true"/>
+        <zip basedir="${apk.dir}/tmp" destfile="${apk.dir}/tmp/new.zip" casesensitive="true"/>
+        <zip basedir="${apk.dir}" destfile="${apk.dir}/tmp/new.zip" casesensitive="true" update="true" level="0" includes="**/lib/**"/>
         <exec executable="${tools.dir}/bin/${zipalign_executable}">
             <arg value="-f"/>
             <arg value="4"/>
-            <arg value="${apk.dir}/new.zip"/>
+            <arg value="${apk.dir}/tmp/new.zip"/>
             <arg value="${apk.dir}/${apk.file}"/>
         </exec>
-        <!--<move file="${apk.dir}/tmp/${apk.file}" tofile="${apk.dir}/${apk.file}" overwrite="true"/>-->
-        <delete dir="${apk.dir}/tmp" includeemptydirs="true" quiet="true"/>
-        <delete file="${apk.dir}/new.zip"/>
+        <delete dir="${apk.dir}/lib" quiet="true"/>
+        <delete dir="${apk.dir}/tmp" quiet="true"/>
     </target>
 
 
