@@ -25,6 +25,7 @@ ifelse(
     (
         ui_print("3. Removing old GApps...");
         set_progress("0.3");
+        delete_recursive("/system/app/Provision","/system/app/QuickSearchBox","/system/priv-app/Provision","/system/priv-app/QuickSearchBox");
         delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android");
         delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android");
         delete(
@@ -63,4 +64,4 @@ set_progress("0.9");
 
 run_program("/sbin/busybox", "umount", "/system");
 set_progress("1");
-ui_print("7. ---DONE--");
+ui_print("---Done---");

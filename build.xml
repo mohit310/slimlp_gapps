@@ -36,6 +36,14 @@
     <property name="sign.pem" value="${app.dir}/tools/testkey.x509.pem"/>
     <property name="sign.pk8" value="${app.dir}/tools/testkey.pk8"/>
 
+    <condition property="isWindows">
+        <os family="windows" />
+    </condition>
+
+    <condition property="zipalign_executable" value="zipalign.exe" else="zipalign">
+        <isset property="isWindows"/>
+    </condition>
+
     <tstamp>
         <format property="build.today" pattern="yyyyMMdd"/>
     </tstamp>
@@ -80,6 +88,7 @@
         <antcall target="createUpdaterScript-zero"/>
         <antcall target="createDynamicScript-zero"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
+        <antcall target="zipAlign"/>
 
         <!-- zip and sign it -->
         <antcall target="ZipAndSigning">
@@ -104,6 +113,7 @@
 
         <antcall target="createUpdaterScript"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
+        <antcall target="zipAlign"/>
 
         <antcall target="ZipAndSigning">
             <param name="hfile.name" value="${file.name.mini}"/>
@@ -243,6 +253,35 @@
             <arg value="${hfile.name}"/>
         </java>
     </target>
+
+
+    <!--=======================================================================-->
+    <!-- zipAlign                                                              -->
+    <!--=======================================================================-->
+    <target name="zipAlign" description="zip and pack">
+        <antcall target="unzipandpack">
+            <param name="apk.file" value="PrebuiltGmsCore.apk"/>
+            <param name="apk.dir" value="${work.dir}/dynamic/PrebuiltGmsCore/arm/priv-app/PrebuiltGmsCore"/>
+        </antcall>
+        <antcall target="unzipandpack">
+            <param name="apk.file" value="GoogleTTS.apk"/>
+            <param name="apk.dir" value="${work.dir}/system/app/GoogleTTS"/>
+        </antcall>
+    </target>
+
+    <target name="unzipandpack">
+        <unzip src="${apk.dir}/${apk.file}" overwrite="true" dest="${apk.dir}/tmp"/>
+        <zip basedir="${apk.dir}/tmp" destfile="${apk.dir}/tmp/new.zip" casesensitive="true"/>
+        <exec executable="${tools.dir}/bin/${zipalign_executable}">
+            <arg value="-f"/>
+            <arg value="4"/>
+            <arg value="${apk.dir}/tmp/new.zip"/>
+            <arg value="${apk.dir}/tmp/${apk.file}"/>
+        </exec>
+        <move file="${apk.dir}/tmp/${apk.file}" tofile="${apk.dir}/${apk.file}" overwrite="true"/>
+        <delete dir="${apk.dir}/tmp" includeemptydirs="true" quiet="true"/>
+    </target>
+
 
     <!--=======================================================================-->
     <!-- cleanupBefore new build                                               -->
