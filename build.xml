@@ -17,6 +17,7 @@
 <project name="buildGapps"
          default="buildAll"
          basedir=".">
+
     <property file="build.properties"/>
     <description>
         This file list is used by ant to build the Slim Gapps project
