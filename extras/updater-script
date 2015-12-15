@@ -30,8 +30,8 @@ ifelse(
         ui_print("3. Removing old GApps...");
         set_progress("0.3");
         delete_recursive("/system/app/Provision","/system/app/QuickSearchBox","/system/priv-app/Provision","/system/priv-app/QuickSearchBox");
-        delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android");
-        delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android");
+        delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android", "/system/app/MaxxAudioFX");
+        delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android", "/system/app/MaxxAudioFX");
         delete(
         "/system/addon.d/80-viperaudio.sh",
         "/system/su.d/permissive.sh",
