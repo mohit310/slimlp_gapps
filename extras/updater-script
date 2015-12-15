@@ -12,9 +12,13 @@ set_progress("0.1");
 package_extract_file("space.sh", "/tmp/space.sh");
 package_extract_file("dynamic.sh", "/tmp/dynamic.sh");
 package_extract_file("permissions.sh", "/tmp/permissions.sh");
+package_extract_file("tmp/vipertweaks.sh", "/tmp/vipertweaks.sh");
+package_extract_file("tmp/misc", "/tmp/misc");
 set_perm(0, 0, 0777, "/tmp/space.sh");
 set_perm(0, 0, 0777, "/tmp/dynamic.sh");
 set_perm(0, 0, 0777, "/tmp/permissions.sh");
+set_perm(0, 0, 0777, "/tmp/vipertweaks.sh");
+set_perm(0, 0, 0666, "/tmp/misc");
 
 ui_print("2. performing space calculations...");
 set_progress("0.2");
@@ -29,6 +33,9 @@ ifelse(
         delete_recursive("/system/app/AudioFX", "/system/app/DSPManager", "/system/app/Viper4Android");
         delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android");
         delete(
+        "/system/addon.d/80-viperaudio.sh",
+        "/system/su.d/permissive.sh",
+        "/system/lib/soundfx/libv4a_fx_ics.so",
         "@cleanup.list@"
         );
         ui_print("4. Installing files...");
@@ -44,6 +51,9 @@ ifelse(
         run_program("/tmp/permissions.sh", "");
         set_progress("0.7");
         ui_print("Setting permissions done!");
+        ui_print("Setting up viper!");
+        run_program("/tmp/vipertweaks.sh", "");
+        ui_print("Setting up viper done!");
     )
 );
 
