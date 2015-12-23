@@ -37,13 +37,13 @@
     <property name="sign.pem" value="${app.dir}/tools/testkey.x509.pem"/>
     <property name="sign.pk8" value="${app.dir}/tools/testkey.pk8"/>
 
-    <condition property="isWindows">
-        <os family="windows" />
-    </condition>
+    <!--<condition property="isWindows">-->
+        <!--<os family="windows" />-->
+    <!--</condition>-->
 
-    <condition property="zipalign_executable" value="zipalign.exe" else="zipalign">
-        <isset property="isWindows"/>
-    </condition>
+    <!--<condition property="zipalign_executable" value="zipalign.exe" else="zipalign">-->
+        <!--<isset property="isWindows"/>-->
+    <!--</condition>-->
 
     <tstamp>
         <format property="build.today" pattern="yyyyMMdd"/>
@@ -113,6 +113,7 @@
         </copy>
 
         <antcall target="createUpdaterScript"/>
+        <antcall target="createDynamicScript"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
         <!--<antcall target="zipAlign"/>-->
 
@@ -155,13 +156,25 @@
     <!--======================================================================-->
     <target name="createDynamicScript-zero">
 
-        <copy file="${structure.dir}/dynamic.sh" todir="${work.dir}">
+        <copy file="${script.dir}/dynamic.sh" todir="${work.dir}">
             <filterchain>
                 <linecontains negate="true">
                     <contains value="#zero"/>
                 </linecontains>
             </filterchain>
         </copy>
+        <copy file="${script.dir}/permissions.sh" todir="${work.dir}"/>
+        <copy file="${script.dir}/space.sh" todir="${work.dir}"/>
+    </target>
+
+    <!--======================================================================-->
+    <!-- Create dynamic script - for mini                                     -->
+    <!--======================================================================-->
+    <target name="createDynamicScript">
+
+        <copy file="${script.dir}/dynamic.sh" todir="${work.dir}"/>
+        <copy file="${script.dir}/permissions.sh" todir="${work.dir}"/>
+        <copy file="${script.dir}/space.sh" todir="${work.dir}"/>
     </target>
 
     <!--======================================================================-->
@@ -173,17 +186,15 @@
         <copy todir="${work.dir}/system/addon.d">
             <fileset dir="${script.dir}">
                 <include name="*.sh"/>
+                <exclude name="**/dynamic.sh"/>
                 <exclude name="**/permissions.sh"/>
+                <exclude name="**/space.sh"/>
             </fileset>
         </copy>
 
         <path id="item.file">
-            <fileset dir="${work.dir}/system">
-                <exclude name="**/*.sh"/>
-            </fileset>
-            <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false">
-                <exclude name="**/*.sh"/>
-            </fileset>
+            <fileset dir="${work.dir}/system"/>
+            <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false"/>
         </path>
 
         <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
@@ -226,7 +237,9 @@
         <path id="cleanup.file">
             <fileset dir="${script.dir}">
                 <include name="*.sh"/>
+                <exclude name="**/dynamic.sh"/>
                 <exclude name="**/permissions.sh"/>
+                <exclude name="**/space.sh"/>
             </fileset>
             <fileset dir="${structure.dir}/system"/>
             <fileset dir="${structure.dir}/dynamic/"/>
