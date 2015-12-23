@@ -39,11 +39,9 @@ ifelse(
         package_extract_dir("dynamic", "/tmp");
         run_program("/tmp/dynamic.sh", "");
         set_progress("0.6");
-        ui_print("Installation complete!");
         ui_print("5. Setting permissions!");
         run_program("/tmp/permissions.sh", "");
         set_progress("0.7");
-        ui_print("Setting permissions done!");
     )
 );
 
