@@ -31,7 +31,7 @@
     <property name="work.dir" value="${app.dir}/work"/>
     <property name="build.dir" value="${app.dir}/build"/>
     <property name="structure.dir" value="${app.dir}/structure"/>
-    <property name="scripts.dir" value="${app.dir}/scripts"/>
+    <property name="script.dir" value="${app.dir}/scripts"/>
     <property name="tools.dir" value="${app.dir}/tools"/>
     <property name="sign.jar" value="${app.dir}/tools/signapk.jar"/>
     <property name="sign.pem" value="${app.dir}/tools/testkey.x509.pem"/>
@@ -113,6 +113,7 @@
         </copy>
 
         <antcall target="createUpdaterScript"/>
+        <antcall target="createDynamicScript"/>
         <antcall target="copyAddonsAndGenerateBackup"/>
         <!--<antcall target="zipAlign"/>-->
 
@@ -126,7 +127,7 @@
     <!-- Create updater script - removing #zero                               -->
     <!--======================================================================-->
     <target name="createUpdaterScript-zero">
-        <copy file="${app.dir}/scripts/updater-script" todir="${work.dir}/META-INF/com/google/android">
+        <copy file="${script.dir}/updater-script" todir="${work.dir}/META-INF/com/google/android">
             <filterchain>
                 <replaceregex pattern="@package@" replace="zero" flags="i"/>
                 <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
@@ -142,26 +143,37 @@
     <!-- Create updater script - with #zero                                   -->
     <!--======================================================================-->
     <target name="createUpdaterScript">
-        <copy file="${app.dir}/scripts/updater-script" todir="${work.dir}/META-INF/com/google/android">
+        <copy file="${script.dir}/updater-script" todir="${work.dir}/META-INF/com/google/android">
             <filterchain>
                 <replaceregex pattern="@package@" replace="mini" flags="i"/>
                 <replaceregex pattern="@cleanup.list@" replace="${cleanup.list}" flags="i"/>
             </filterchain>
         </copy>
+
     </target>
 
     <!--======================================================================-->
     <!-- Create dynamic script - removing #zero                               -->
     <!--======================================================================-->
     <target name="createDynamicScript-zero">
-
-        <copy file="/scripts/dynamic.sh" todir="${work.dir}">
+        <copy file="${script.dir}/dynamic.sh" todir="${work.dir}">
             <filterchain>
                 <linecontains negate="true">
                     <contains value="#zero"/>
                 </linecontains>
             </filterchain>
         </copy>
+        <copy file="${script.dir}/permissions.sh" todir="${work.dir}/"/>
+        <copy file="${script.dir}/space.sh" todir="${work.dir}/"/>
+    </target>
+
+    <!--======================================================================-->
+    <!-- Create dynamic script - for mini                                     -->
+    <!--======================================================================-->
+    <target name="createDynamicScript">
+        <copy file="${script.dir}/dynamic.sh" todir="${work.dir}"/>
+        <copy file="${script.dir}/permissions.sh" todir="${work.dir}/"/>
+        <copy file="${script.dir}/space.sh" todir="${work.dir}/"/>
     </target>
 
     <!--======================================================================-->
@@ -171,18 +183,17 @@
 
         <!-- generate backup script -->
         <copy todir="${work.dir}/system/addon.d">
-            <fileset dir="${scripts.dir}">
+            <fileset dir="${script.dir}">
                 <include name="*.sh"/>
+                <exclude name="**/dynamic.sh"/>
+                <exclude name="**/permissions.sh"/>
+                <exclude name="**/space.sh"/>
             </fileset>
         </copy>
 
         <path id="item.file">
-            <fileset dir="${work.dir}/system">
-                <exclude name="**/*.sh"/>
-            </fileset>
-            <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false">
-                <exclude name="**/*.sh"/>
-            </fileset>
+            <fileset dir="${work.dir}/system"/>
+            <fileset dir="${work.dir}/dynamic/" erroronmissingdir="false"/>
         </path>
 
         <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
@@ -223,14 +234,17 @@
     <!--=======================================================================-->
     <target name="generateCleanUpList">
         <path id="cleanup.file">
-            <fileset dir="${scripts.dir}">
+            <fileset dir="${script.dir}">
                 <include name="*.sh"/>
+                <exclude name="**/dynamic.sh"/>
+                <exclude name="**/permissions.sh"/>
+                <exclude name="**/space.sh"/>
             </fileset>
             <fileset dir="${structure.dir}/system"/>
             <fileset dir="${structure.dir}/dynamic/"/>
         </path>
         <pathconvert refid="cleanup.file" property="cleanup.list" pathsep="&quot;,&#10;&quot;" dirsep="/">
-            <map from="${scripts.dir}" to="/system/addon.d"/>
+            <map from="${script.dir}" to="/system/addon.d"/>
             <map from="${structure.dir}/system/" to="/system/"/>
             <map from="${structure.dir}/dynamic/FaceLock/arm/" to="/system/"/>
             <map from="${structure.dir}/dynamic/LatinIME_swypelib/" to="/system/"/>
