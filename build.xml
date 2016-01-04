@@ -37,14 +37,6 @@
     <property name="sign.pem" value="${app.dir}/tools/testkey.x509.pem"/>
     <property name="sign.pk8" value="${app.dir}/tools/testkey.pk8"/>
 
-    <condition property="isWindows">
-        <os family="windows" />
-    </condition>
-
-    <condition property="zipalign_executable" value="zipalign.exe" else="zipalign">
-        <isset property="isWindows"/>
-    </condition>
-
     <tstamp>
         <format property="build.today" pattern="yyyyMMdd"/>
     </tstamp>
