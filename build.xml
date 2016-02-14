@@ -68,6 +68,7 @@
         <property name="file.name.zero"
                   value="${build.dir}/Slim_zero_gapps.BETA.${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_MAINTENANCE}-${build.today}.zip"/>
         <delete dir="${work.dir}"/>
+
         <!-- copy files -->
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}">
@@ -77,6 +78,14 @@
                 <exclude name="dynamic.sh"/>
             </fileset>
         </copy>
+
+        <!-- repackage libs and zipalign -->
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/dynamic/PrebuiltGmsCore/arm/priv-app/PrebuiltGmsCore"/>
+        </antcall>
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/system/app/GoogleTTS"/>
+        </antcall>
 
         <antcall target="createUpdaterScript-zero"/>
         <antcall target="createDynamicScript-zero"/>
@@ -103,6 +112,19 @@
         <copy todir="${work.dir}">
             <fileset dir="${structure.dir}"/>
         </copy>
+
+
+        <!-- repackage libs and zipalign -->
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/dynamic/PrebuiltGmsCore/arm/priv-app/PrebuiltGmsCore"/>
+        </antcall>
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/dynamic/Velvet/arm/priv-app/Velvet"/>
+        </antcall>
+        <antcall target="fixLibs">
+            <param name="apk.dir" value="${work.dir}/system/app/GoogleTTS"/>
+        </antcall>
+
 
         <antcall target="createUpdaterScript"/>
         <antcall target="createDynamicScript"/>
@@ -295,6 +317,17 @@
         <!--<delete dir="${apk.dir}/tmp" quiet="true"/>-->
     <!--</target>-->
 
+
+    <!--=======================================================================-->
+    <!-- repackage libs and zipalign                                           -->
+    <!--=======================================================================-->
+    <target name="fixLibs">
+        <echo message="Decompressing and repackaging libs, zipaligning"/>
+        <exec executable="/bin/bash" dir="${tools.dir}" failonerror="true" >
+            <arg value="libWork.sh"/>
+            <arg value="${apk.dir}"/>
+        </exec>
+    </target>
 
     <!--=======================================================================-->
     <!-- cleanupBefore new build                                               -->
