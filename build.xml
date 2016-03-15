@@ -221,6 +221,7 @@
 
         <space dir="${work.dir}" exclude="META-INF,.sh" property="file.size.prop">
             <map from="/dynamic/FaceLock/arm" to="/system"/>
+            <map from="/dynamic/libfrsdk/arm" to="/system"/>
             <map from="/dynamic/PrebuiltGmsCore/arm" to="/system"/>
             <map from="/dynamic/LatinIME_swypelib" to="/system/"/>
             <map from="/dynamic/SetupWizard/phone" to="/system"/>
@@ -231,6 +232,7 @@
         <replace file="${work.dir}/apps_space.prop" token="\" value="/"/>
         <!-- Escape for windows build -->
         <replace file="${work.dir}/apps_space.prop" token="/dynamic/FaceLock/arm" value="/system"/>
+        <replace file="${work.dir}/apps_space.prop" token="/dynamic/libfrsdk/arm" value="/system"/>
         <replace file="${work.dir}/apps_space.prop" token="/dynamic/LatinIME_swypelib" value="/system"/>
         <replace file="${work.dir}/apps_space.prop" token="/dynamic/PrebuiltGmsCore/arm" value="/system"/>
         <replace file="${work.dir}/apps_space.prop" token="/dynamic/SetupWizard/phone" value="/system"/>
@@ -239,6 +241,7 @@
         <pathconvert refid="item.file" property="file.list.backup" pathsep="&#10;" dirsep="/">
             <map from="${work.dir}/system/" to=""/>
             <map from="${work.dir}/dynamic/FaceLock/arm/" to=""/>
+            <map from="${work.dir}/dynamic/libfrsdk/arm/" to=""/>
             <map from="${work.dir}/dynamic/LatinIME_swypelib/" to=""/>
             <map from="${work.dir}/dynamic/PrebuiltGmsCore/arm/" to=""/>
             <map from="${work.dir}/dynamic/Velvet/arm/" to=""/>
@@ -270,6 +273,7 @@
             <map from="${script.dir}" to="/system/addon.d"/>
             <map from="${structure.dir}/system/" to="/system/"/>
             <map from="${structure.dir}/dynamic/FaceLock/arm/" to="/system/"/>
+            <map from="${structure.dir}/dynamic/libfrsdk/arm/" to="/system/"/>
             <map from="${structure.dir}/dynamic/LatinIME_swypelib/" to="/system/"/>
             <map from="${structure.dir}/dynamic/PrebuiltGmsCore/arm/" to="/system/"/>
             <map from="${structure.dir}/dynamic/SetupWizard/phone" to="/system/"/>
@@ -291,41 +295,6 @@
             <arg value="${hfile.name}"/>
         </java>
     </target>
-
-
-    <!--&lt;!&ndash;=======================================================================&ndash;&gt;-->
-    <!--&lt;!&ndash; zipAlign                                                              &ndash;&gt;-->
-    <!--&lt;!&ndash;=======================================================================&ndash;&gt;-->
-    <!--<target name="zipAlign" description="zip and pack">-->
-        <!--<antcall target="unzipandpack">-->
-            <!--<param name="apk.file" value="PrebuiltGmsCore.apk"/>-->
-            <!--<param name="apk.dir" value="${work.dir}/dynamic/PrebuiltGmsCore/arm/priv-app/PrebuiltGmsCore"/>-->
-        <!--</antcall>-->
-        <!--<antcall target="unzipandpack">-->
-            <!--<param name="apk.file" value="GoogleTTS.apk"/>-->
-            <!--<param name="apk.dir" value="${work.dir}/system/app/GoogleTTS"/>-->
-        <!--</antcall>-->
-    <!--</target>-->
-
-    <!--&lt;!&ndash;=======================================================================&ndash;&gt;-->
-    <!--&lt;!&ndash; zipAlign                                                              &ndash;&gt;-->
-    <!--&lt;!&ndash;=======================================================================&ndash;&gt;-->
-    <!--<target name="unzipandpack">-->
-        <!--<unzip src="${apk.dir}/${apk.file}" overwrite="true" dest="${apk.dir}/tmp"/>-->
-        <!--<delete dir="${apk.dir}/lib"/>-->
-        <!--<move file="${apk.dir}/tmp/lib" todir="${apk.dir}" overwrite="true" force="true"/>-->
-        <!--<zip basedir="${apk.dir}/tmp" destfile="${apk.dir}/tmp/new.zip" casesensitive="true"/>-->
-        <!--<zip basedir="${apk.dir}" destfile="${apk.dir}/tmp/new.zip" casesensitive="true" update="true" compress="false" level="0" includes="**/lib/**" duplicate="preserve"/>-->
-        <!--<exec executable="${tools.dir}/bin/${zipalign_executable}">-->
-            <!--<arg value="-f"/>-->
-            <!--<arg value="4"/>-->
-            <!--<arg value="${apk.dir}/tmp/new.zip"/>-->
-            <!--<arg value="${apk.dir}/${apk.file}"/>-->
-        <!--</exec>-->
-        <!--<delete dir="${apk.dir}/lib" quiet="true"/>-->
-        <!--<delete dir="${apk.dir}/tmp" quiet="true"/>-->
-    <!--</target>-->
-
 
     <!--=======================================================================-->
     <!-- repackage libs and zipalign                                           -->
