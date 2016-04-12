@@ -46,8 +46,7 @@ ifelse(
         package_extract_dir("dynamic", "/tmp");
         run_program("/tmp/dynamic.sh", "");
         set_progress("0.6");
-        ui_print("Installation complete!");
-        ui_print("5. Setting permissions!");
+        ui_print("6. Setting permissions!");
         run_program("/tmp/permissions.sh", "");
         set_progress("0.7");
         ui_print("Setting permissions done!");
@@ -68,10 +67,8 @@ ifelse(
     )
 );
 
-delete("/tmp/space.sh","/tmp/apps_space.prop","/tmp/dynamic.sh","/tmp/permissions.sh","/tmp/build.prop");
-ui_print("6. unmounting system...");
+ui_print("unmounting system...");
 set_progress("0.9");
 
 run_program("/sbin/umount", "/system");
 set_progress("1");
-ui_print("---Done---");
