@@ -82,7 +82,7 @@
             <fileset dir="${structure.dir}">
                 <exclude name="system/usr/**"/>
                 <exclude name="system/vendor/pittpatt/**"/>
-                <exclude name="system/priv-app/HotwordEnrollment"/>
+                <exclude name="system/priv-app/HotwordEnrollment/**"/>
                 <exclude name="dynamic/FaceLock/**"/>
                 <exclude name="dynamic/Velvet/**"/>
                 <exclude name="dynamic.sh"/>
