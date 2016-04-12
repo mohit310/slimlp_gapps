@@ -1,7 +1,7 @@
 #!/sbin/sh
 #
 # Script: /system/addon.d/80-viperaudio.sh
-# This addon.d script restores MaxAudioFX after doing a dirty ROM flash:
+# This addon.d script restores Viper4Android after doing a dirty ROM flash:
 
 . /tmp/backuptool.functions
 
@@ -12,8 +12,7 @@ etc/audio_policy.conf
 priv-app/Viper4Android/ViPER4Android_FX.apk
 vendor/etc/audio_effects.conf
 vendor/lib/libgnustl_shared.so
-vendor/lib/libMA3-wavesfx-Coretex_A9.so
-vendor/lib/libMA3-wavesfx-Qualcomm.so
+lib/soundfx/libv4a_fx_ics.so
 EOF
 }
 

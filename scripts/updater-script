@@ -34,7 +34,7 @@ ifelse(
         delete_recursive("/system/priv-app/AudioFX", "/system/priv-app/DSPManager", "/system/priv-app/Viper4Android", "/system/app/MaxxAudioFX");
         delete(
         "/system/addon.d/80-viperaudio.sh",
-        "/system/su.d/permissive.sh",
+        "/system/su.d/50viper.sh",
         "/system/lib/soundfx/libv4a_fx_ics.so",
         "@cleanup.list@"
         );
@@ -42,6 +42,8 @@ ifelse(
         set_progress("0.4");
         package_extract_dir("system", "/system");
         set_perm(0, 0, 0755, "/system/addon.d/80-gapps.sh");
+        set_perm(0, 0, 0755, "/system/addon.d/80-viperaudio.sh");
+        ui_print("5. running dynamic installation...");
         set_progress("0.5");
         package_extract_dir("dynamic", "/tmp");
         run_program("/tmp/dynamic.sh", "");
@@ -50,9 +52,11 @@ ifelse(
         run_program("/tmp/permissions.sh", "");
         set_progress("0.7");
         ui_print("Setting permissions done!");
-        ui_print("Setting up viper!");
+        ui_print("7. Setting up viper!");
+        set_progress("0.8");
         run_program("/tmp/vipertweaks.sh", "");
         ui_print("Setting up viper done!");
+        ui_print("Installation complete!");
     )
 );
 
