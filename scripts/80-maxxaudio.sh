@@ -14,6 +14,7 @@ vendor/lib/soundfx/libmaxxeffect-cembedded.so
 vendor/lib/soundfx/libqcbassboost.so
 vendor/lib/soundfx/libqcreverb.so
 vendor/lib/soundfx/libqcvirt.so
+vendor/lib/libgnustl_shared.so
 vendor/lib/libMA3-wavesfx-Coretex_A9.so
 vendor/lib/libMA3-wavesfx-Qualcomm.so
 EOF
