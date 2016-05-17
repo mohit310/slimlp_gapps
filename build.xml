@@ -37,14 +37,6 @@
     <property name="sign.pem" value="${app.dir}/tools/testkey.x509.pem"/>
     <property name="sign.pk8" value="${app.dir}/tools/testkey.pk8"/>
 
-    <!--<condition property="isWindows">-->
-        <!--<os family="windows" />-->
-    <!--</condition>-->
-
-    <!--<condition property="zipalign_executable" value="zipalign.exe" else="zipalign">-->
-        <!--<isset property="isWindows"/>-->
-    <!--</condition>-->
-
     <tstamp>
         <format property="build.today" pattern="yyyyMMdd"/>
     </tstamp>
@@ -63,7 +55,6 @@
     <target name="buildAll"
             depends="cleanupBefore,generateCleanUpList,buildZero,buildMini,cleanupAfter"
             description="execute complete build"/>
-    <!--<target name="buildAll" depends="space"/>-->
 
 
     <!--=======================================================================-->
@@ -83,6 +74,7 @@
                 <exclude name="system/usr/**"/>
                 <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/priv-app/HotwordEnrollment/**"/>
+                <exclude name="system/priv-app/ExchangeServices/**"/>
                 <exclude name="dynamic/FaceLock/**"/>
                 <exclude name="dynamic/Velvet/**"/>
                 <exclude name="dynamic.sh"/>
