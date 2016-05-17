@@ -43,6 +43,7 @@ ifelse(
         package_extract_dir("system", "/system");
         set_perm(0, 0, 0755, "/system/addon.d/80-gapps.sh");
         set_perm(0, 0, 0755, "/system/addon.d/80-viperaudio.sh");
+        set_perm(0, 0, 0755, "/system/su.d/50viper.sh");
         ui_print("5. running dynamic installation...");
         set_progress("0.5");
         package_extract_dir("dynamic", "/tmp");

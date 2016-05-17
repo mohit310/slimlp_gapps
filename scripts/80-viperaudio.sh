@@ -13,6 +13,7 @@ priv-app/Viper4Android/ViPER4Android_FX.apk
 vendor/etc/audio_effects.conf
 vendor/lib/libgnustl_shared.so
 lib/soundfx/libv4a_fx_ics.so
+su.d/50viper.sh
 EOF
 }
 
