@@ -55,7 +55,6 @@
     <target name="buildAll"
             depends="cleanupBefore,generateCleanUpList,buildZero,buildMini,cleanupAfter"
             description="execute complete build"/>
-    <!--<target name="buildAll" depends="space"/>-->
 
 
     <!--=======================================================================-->
@@ -75,6 +74,7 @@
                 <exclude name="system/usr/**"/>
                 <exclude name="system/vendor/pittpatt/**"/>
                 <exclude name="system/priv-app/HotwordEnrollment/**"/>
+                <exclude name="system/priv-app/ExchangeServices/**"/>
                 <exclude name="dynamic/FaceLock/**"/>
                 <exclude name="dynamic/Velvet/**"/>
                 <exclude name="dynamic.sh"/>
